@@ -1,0 +1,18 @@
+include 'academy-user-detail-interface'
+include 'academy-user-detail-repository'
+include 'academy-user-detail'
+
+include 'academy-user-interface'
+include 'academy-user-repository'
+include 'academy-user'
+
+include 'academy-shared'
+include 'academy-web'
+include 'academy-security'
+
+
+rootProject.name = 'academy'
+
+rootProject.children.each { subproject -> 
+     subproject.buildFileName = "${subproject.name}.gradle" 
+}

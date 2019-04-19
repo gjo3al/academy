@@ -1,0 +1,13 @@
+dependencies {
+	implementation 'org.springframework.security:spring-security-core:5.1.5.RELEASE'
+	implementation 'org.springframework.security:spring-security-config:5.1.5.RELEASE'
+	implementation 'org.springframework.security:spring-security-web:5.1.5.RELEASE'
+	implementation 'org.springframework:spring-tx:5.1.6.RELEASE'
+	
+	implementation 'org.mariadb.jdbc:mariadb-java-client:2.3.0'
+	
+	// for AbstractSecurityWebApplicationInitializer
+	compileOnly 'javax.servlet:javax.servlet-api:4.0.1'
+	
+	implementation 'org.hibernate:hibernate-core:5.4.2.Final'
+}

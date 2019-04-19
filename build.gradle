@@ -1,0 +1,90 @@
+plugins {
+    id 'base'
+}
+
+subprojects {
+	apply plugin: 'java-library'
+	
+	description = 'Academy Root Project'
+	group = theGroup
+	version = theVersion
+
+	sourceCompatibility = theSourceCompatibility
+	targetCompatibility = theSourceCompatibility
+	
+	repositories {
+    	jcenter()
+	}
+}
+
+project(':academy-user-detail-interface') {
+
+    dependencies {
+        api project(':academy-shared')
+    }
+}
+
+project(':academy-user-detail-repository') {
+
+    dependencies {
+        api project(':academy-user-detail-interface')
+    }
+}
+
+project(':academy-user-detail') {
+
+    dependencies {
+        api project(':academy-user-detail-interface')
+        api project(':academy-user-detail-repository')
+    }
+}
+
+
+project(':academy-user-interface') {
+
+    dependencies {
+    	api project(':academy-user-detail-interface')
+    
+        api project(':academy-shared')
+    }
+}
+
+project(':academy-user-repository') {
+
+    dependencies {
+        api project(':academy-user-interface')
+    }
+}
+
+project(':academy-user') {
+
+    dependencies {
+        api project(':academy-user-interface')
+        api project(':academy-user-repository')
+        
+        api project(':academy-user-detail')
+    }
+}
+
+project(':academy-web') {
+
+    dependencies {
+    	api project(':academy-user')
+    	api project(':academy-user-repository')
+    
+        api project(':academy-user-detail-repository')
+        api project(':academy-user-detail')
+        
+        api project(':academy-shared')
+        api project(':academy-security')
+    }
+}
+
+project(':academy-security') {
+
+    dependencies {
+        api project(':academy-shared')
+        
+        api project(':academy-user-repository')
+    }
+}

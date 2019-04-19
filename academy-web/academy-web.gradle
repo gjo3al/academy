@@ -1,0 +1,27 @@
+plugins {
+    id 'war'
+    id 'org.gretty' version '2.3.1'
+}
+
+// There are some bugs in older version, so we use the lastest one
+// use task 'appRun'
+
+// Some ref about hot deploy: 
+// https://stackoverflow.com/questions/50381193/gretty-spring-mvc-and-hot-deployment
+gretty {
+    servletContainer = 'jetty9.4'
+    reloadOnClassChange=true
+}
+
+ext.tomcatHome = 'C:/Apache Software Foundation/Tomcat 9.0'
+ext.tomcatWebapps = "$tomcatHome/webapps"
+
+war{
+	archiveName = 'academy-web.war'	
+}
+
+dependencies {
+	implementation 'org.springframework:spring-webmvc:5.1.5.RELEASE'
+	implementation 'javax.servlet:jstl:1.2'
+	compileOnly 'javax.servlet.jsp:javax.servlet.jsp-api:2.3.3' 
+}

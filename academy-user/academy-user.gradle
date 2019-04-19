@@ -1,0 +1,12 @@
+dependencies {
+	implementation 'org.springframework:spring-core:5.1.6.RELEASE'
+	implementation 'org.springframework:spring-webmvc:5.1.6.RELEASE'
+	implementation 'org.springframework:spring-tx:5.1.6.RELEASE'
+	
+	implementation 'javax.persistence:javax.persistence-api:2.2'
+	
+	implementation 'org.hibernate.validator:hibernate-validator:6.0.16.Final'
+	
+	implementation 'org.springframework.security:spring-security-core:5.1.5.RELEASE'
+}
+
