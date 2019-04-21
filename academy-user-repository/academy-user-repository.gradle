@@ -1,9 +1,6 @@
 dependencies {
 	implementation 'org.springframework:spring-webmvc:5.1.6.RELEASE'
 	implementation 'org.springframework:spring-core:5.1.6.RELEASE'
-    implementation 'org.mariadb.jdbc:mariadb-java-client:2.3.0'
-    implementation 'org.springframework:spring-tx:5.1.6.RELEASE'
-    implementation 'org.springframework:spring-orm:5.1.6.RELEASE'
     
     implementation 'org.hibernate:hibernate-core:5.4.2.Final'
 }

@@ -25,15 +25,6 @@ public class UserRepositoryImpl implements UserRepository {
 	}
 
 	@Override
-	public Users read(String username) {
-		Session session = factory.getCurrentSession();
-
-		Users result = session.get(Users.class, username);
-
-		return result;
-	}
-
-	@Override
 	public Users update(Users domainObject) {
 		Session session = factory.getCurrentSession();
 

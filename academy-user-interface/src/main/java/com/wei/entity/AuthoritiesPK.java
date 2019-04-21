@@ -2,6 +2,7 @@ package com.wei.entity;
 
 import java.io.Serializable;
 
+@SuppressWarnings("serial")
 public class AuthoritiesPK implements Serializable {
 
 	private String authority;

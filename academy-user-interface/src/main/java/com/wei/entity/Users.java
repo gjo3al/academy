@@ -6,7 +6,6 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -44,7 +43,7 @@ public class Users {
 	@JoinColumn(name="detail_id")
 	private UserDetail userDetail;
 
-	@OneToMany(mappedBy="user", cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	@OneToMany(mappedBy="user", cascade=CascadeType.ALL)
 	private List<Authorities> authorities;
 	
 	public Users() {
@@ -100,6 +99,14 @@ public class Users {
 
 	public void setAuthorities(List<Authorities> authorities) {
 		this.authorities = authorities;
+	}
+	
+	public String getNickname() {
+		return userDetail.getNickname();
+	}
+	
+	public String getEmail() {
+		return userDetail.getEmail();
 	}
 
 	public void addAuthority(String role) {

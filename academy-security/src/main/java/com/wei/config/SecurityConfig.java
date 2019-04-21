@@ -1,7 +1,5 @@
 package com.wei.config;
 
-import javax.sql.DataSource;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,13 +10,12 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-
-	@Autowired
-	private DataSource dataSource;
 	
 	@Autowired
 	private UserDetailsService authenticationService;
@@ -29,8 +26,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .authorizeRequests()
             .antMatchers("/").hasRole("STUDENT")
             .antMatchers("/register/**").permitAll()
-            .and()
-        .formLogin();
+        .and()
+	        .formLogin()
+	        .loginPage("/showLoginPage")
+			.loginProcessingUrl("/authenticateTheUser") // built-in path for authenticate
+			.successHandler(customAuthenticationSuccessHandler())
+			.failureHandler(customAuthenticationFailureHandler())
+			.permitAll()
+        ;
 	}
 
 	@Override
@@ -50,4 +53,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		auth.setUserDetailsService(authenticationService);
 		return auth;
 	}
+	
+	@Bean
+    public AuthenticationFailureHandler customAuthenticationFailureHandler() {
+        return new CustomAuthenticationFailureHandler();
+    }
+	
+	@Bean
+    public AuthenticationSuccessHandler customAuthenticationSuccessHandler() {
+        return new CustomAuthenticationSuccessHandler();
+    }
 }

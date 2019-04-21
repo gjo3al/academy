@@ -6,6 +6,10 @@ include 'academy-user-interface'
 include 'academy-user-repository'
 include 'academy-user'
 
+include 'academy-audit-interface'
+include 'academy-audit-repository'
+include 'academy-audit'
+
 include 'academy-shared'
 include 'academy-web'
 include 'academy-security'

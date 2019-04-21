@@ -66,6 +66,30 @@ project(':academy-user') {
     }
 }
 
+project(':academy-audit-interface') {
+
+    dependencies {
+        api project(':academy-shared')
+        
+        api project(':academy-user-interface')
+    }
+}
+
+project(':academy-audit-repository') {
+
+    dependencies {
+        api project(':academy-audit-interface')
+    }
+}
+
+project(':academy-audit') {
+
+    dependencies {
+        api project(':academy-audit-interface')
+        api project(':academy-audit-repository')
+    }
+}
+
 project(':academy-web') {
 
     dependencies {
@@ -85,6 +109,8 @@ project(':academy-security') {
     dependencies {
         api project(':academy-shared')
         
-        api project(':academy-user-repository')
+        api project(':academy-user')
+        
+        api project(':academy-audit')
     }
 }
