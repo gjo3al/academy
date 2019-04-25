@@ -10,11 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.wei.entity.RegistrationUser;
+import com.wei.entity.Users;
 import com.wei.service.RegisterService;
 import com.wei.service.UserService;
 
@@ -22,7 +25,13 @@ import com.wei.service.UserService;
 @RequestMapping("/register")
 public class RegisterController {
 
-	private final String USER_HAS_EXISTED = "User name already exists."; 
+	private final String USER_HAS_EXISTED = "User name or email already exists."; 
+	
+	private final String VERIFY_SUCCESS_MESSAGE = "驗證成功，按以下連結回首頁";
+	
+	private final String HAS_VERIFY_MESSAGE = "此帳號已驗證，按以下連結回首頁";
+	
+	private final String VERIFY_FAIL_MESSAGE = "驗證失敗，按以下連結回首頁";
 	
 	@Autowired
 	private RegisterService registerService;
@@ -32,14 +41,11 @@ public class RegisterController {
 	
 	private Map<String, String> authorities; 
 	
-	
-	
 	@PostConstruct
 	protected void loadAuthorities() {
 		authorities = new HashMap<>();
 		authorities.put("ROLE_TEACHER", "Teacher");
 	}
-	
 	
 	@RequestMapping("")
 	public String showRegisterForm(Model theModel) {
@@ -61,7 +67,9 @@ public class RegisterController {
 		
 		String username = registrationUser.getUsername();
 		
-		if(doesUserExist(username)) {
+		String email = registrationUser.getEmail();
+		
+		if(doesUserOrEmailExist(username, email)) {
 			initRegistrationForm(theModel);
 			theModel.addAttribute("registrationError", USER_HAS_EXISTED);
 			return "register-form";
@@ -72,6 +80,29 @@ public class RegisterController {
 		return "register-success";
 	}
 	
+	@GetMapping("/verify")
+	public String verify(
+			@RequestParam String email, 
+			@RequestParam String token, 
+			Model theModel) {
+		
+		Users theUser = userService.verify(email, token);
+		
+		if(theUser != null) {
+			if(theUser.isEnabled()) {
+				theModel.addAttribute("result", HAS_VERIFY_MESSAGE);
+			}else {
+				theUser.setEnabled(true);
+				userService.update(theUser);
+				theModel.addAttribute("result", VERIFY_SUCCESS_MESSAGE);
+			}
+		} else {
+			theModel.addAttribute("result", VERIFY_FAIL_MESSAGE);
+		}
+		
+		return "verify-result";
+	}
+	
 	private void initRegistrationForm(Model theModel) {
 		
 		theModel.addAttribute("authorities", authorities);
@@ -80,10 +111,10 @@ public class RegisterController {
 			theModel.addAttribute("registrationUser", new RegistrationUser());
 	}
 	
-	private boolean doesUserExist(String username) {
-		boolean exist = false;
-		if(userService.findByUserName(username) != null)
-			exist = true;
-		return exist;
+	private boolean doesUserOrEmailExist(String username, String email) {
+		
+		return (userService.findByUserName(username) != null) || 
+				(userService.findByEmail(email) != null);
 	}
+	
 }

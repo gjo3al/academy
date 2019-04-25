@@ -33,7 +33,7 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
 		
 		Users user = userService.findByUserName(username);
 		
-		if(user != null) {
+		if(user != null && user.isEnabled()) {
 			writeAudit(user, request.getRemoteAddr());
 		}
 		

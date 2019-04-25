@@ -10,6 +10,8 @@ include 'academy-audit-interface'
 include 'academy-audit-repository'
 include 'academy-audit'
 
+include 'academy-course-interface'
+
 include 'academy-shared'
 include 'academy-web'
 include 'academy-security'

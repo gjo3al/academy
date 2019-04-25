@@ -93,7 +93,7 @@
 						<div style="margin-bottom: 25px"
 							class="input-group">
 							<span class="input-group-addon">
-								<i class="glyphicon glyphicon-user"></i>
+								<i class="glyphicon glyphicon-envelope"></i>
 							</span>
 							<form:errors path="userInfo.userDetail.email"
 										cssClass="error" />
@@ -114,6 +114,7 @@
 								</button>
 							</div>
 						</div>
+						<a href="${pageContext.request.contextPath}" class="btn btn-success">回到首頁</a> 
 					</form:form>
 				</div>
 			</div>

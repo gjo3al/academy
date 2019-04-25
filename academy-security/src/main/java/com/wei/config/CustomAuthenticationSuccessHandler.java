@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.savedrequest.SavedRequest;
 
 import com.wei.entity.Audit;
 import com.wei.entity.Users;
@@ -32,8 +33,12 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 			HttpServletResponse response, 
 			Authentication authentication)
 			throws IOException, ServletException {
-
-		String redirectPath = "";
+		
+		// redirect to previous url
+		SavedRequest savedRequest = (SavedRequest)
+				request.getSession().getAttribute("SPRING_SECURITY_SAVED_REQUEST"); 
+		
+		String redirectPath = savedRequest.getRedirectUrl();
 		
 		String username = authentication.getName();
 		

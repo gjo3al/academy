@@ -33,7 +33,11 @@ public class AuthenticationService implements UserDetailsService {
 			throw new UsernameNotFoundException("Invalid username or password.");
 		}
 		
-		return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
+		return new org.springframework.security.core.userdetails.User(
+				user.getUsername(), 
+				user.getPassword(),
+				user.isEnabled(),
+				true, true, true,
 				mapToAuthorities(user.getAuthorities()));
 	}
 

@@ -90,6 +90,15 @@ project(':academy-audit') {
     }
 }
 
+project(':academy-course-interface') {
+
+    dependencies {
+        api project(':academy-shared')
+        
+        api project(':academy-user-interface')
+    }
+}
+
 project(':academy-web') {
 
     dependencies {

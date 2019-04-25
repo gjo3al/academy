@@ -32,4 +32,8 @@ public class UserInfo {
 	public String getUsername() {
 		return users.getUsername();
 	}
+	
+	public String getEmail() {
+		return userDetail.getEmail();
+	}
 }

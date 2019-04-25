@@ -1,8 +1,10 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>  
 
 <!doctype html>
-<html lang="en">
+<html>
 
 <head>
 	
@@ -30,7 +32,7 @@
 			<div class="panel panel-info">
 
 				<div class="panel-heading">
-					<div class="panel-title">Sign In</div>
+					<div class="panel-title">登入</div>
 				</div>
 
 				<div style="padding-top: 30px" class="panel-body">
@@ -81,7 +83,25 @@
 						<!-- Login/Submit Button -->
 						<div style="margin-top: 10px" class="form-group">						
 							<div class="col-sm-6 controls">
-								<button type="submit" class="btn btn-success">Login</button>
+								<button type="submit" class="btn btn-success">登入</button>
+							</div>
+						</div>
+						
+						<div style="margin-top: 10px" class="form-group">						
+							<div class="col-sm-6 controls">
+								<a href="${pageContext.request.contextPath}/register" 
+									class="btn btn-primary">
+									註冊
+								</a>
+							</div>
+						</div>
+						
+						<div style="margin-top: 10px" class="form-group">						
+							<div class="col-sm-6 controls">
+								<a href="${pageContext.request.contextPath}/users/forget" 
+									class="btn btn-warning">
+									忘記密碼
+								</a>
 							</div>
 						</div>
 					</form:form>
@@ -91,7 +111,7 @@
 			</div>
 
 		</div>
-
+		
 	</div>
 
 </body>

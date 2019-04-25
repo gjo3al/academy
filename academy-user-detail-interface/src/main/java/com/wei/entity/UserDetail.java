@@ -37,6 +37,14 @@ public class UserDetail {
 		this.email = email;
 	}
 
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	public String getNickname() {
 		return nickname;
 	}

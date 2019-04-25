@@ -37,10 +37,12 @@
 		<tr>
 			<td>
 			<button type="submit" 
-					onclick="if(!(confirm('確定要刪除紀錄?'))) return false">
+					onclick="if(!(confirm('確定要刪除紀錄?'))) return false"
+					class="btn btn-warning">
 				刪除紀錄
 			</button>
-			</td>
+			<a href="${pageContext.request.contextPath}" class="btn btn-success">回到首頁</a>
+			</td> 
 		</tr>
 		</form:form>
 	</table>

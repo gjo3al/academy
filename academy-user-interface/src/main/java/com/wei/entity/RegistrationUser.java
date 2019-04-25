@@ -52,9 +52,8 @@ public class RegistrationUser {
 		return userInfo.getUsername();
 	}
 	
-	@Override
-	public String toString() {
-		return "RegistrationUser [userInfo=" + userInfo + ", matchingPassword=" + matchingPassword + ", authorities=" + authorities + "]";
+	public String getEmail() {
+		return userInfo.getEmail();
 	}
 
 }

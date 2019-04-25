@@ -63,4 +63,24 @@ public class UserRepositoryImpl implements UserRepository {
 		return result;
 	}
 
+	@Override
+	public Users findByEmail(String email) {
+		Session session = factory.getCurrentSession();
+		
+		Users result = null;
+		
+		Query<Users> theQuery = session.createQuery(
+				"from Users user inner join fetch user.userDetail detail "
+				+ "where detail.email=:email", Users.class);
+		theQuery.setParameter("email", email);
+		
+		try {
+			result = theQuery.getSingleResult();
+		} catch (Exception e) {
+			result = null;
+		}
+		
+		return result;
+	}
+	
 }

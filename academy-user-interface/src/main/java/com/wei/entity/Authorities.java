@@ -83,7 +83,7 @@ public class Authorities implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Authorities [authority=" + authority + ", user=" + user + "]";
+		return "Authorities [authority=" + authority + ", userId=" + user.getId() + "]";
 	}
 	
 }

@@ -9,5 +9,13 @@ dependencies {
 	
 	// For passwordEncoder
 	implementation 'org.springframework.security:spring-security-core:5.1.5.RELEASE'
+	
+	implementation('com.sun.mail:javax.mail:1.6.2') {
+		exclude group: 'javax.activation', module: 'activation'
+	}
+	
+	// For HttpServletRequest
+	compileOnly 'javax.servlet:javax.servlet-api:4.0.1'
+	
 }
 

@@ -25,7 +25,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http
         .authorizeRequests()
             .antMatchers("/").hasRole("STUDENT")
+            .antMatchers("/audits/**").hasRole("STUDENT")
+            .antMatchers("/users/reset/**").hasRole("STUDENT")
             .antMatchers("/register/**").permitAll()
+            .antMatchers("/users/forget").anonymous()
         .and()
 	        .formLogin()
 	        .loginPage("/showLoginPage")
@@ -33,6 +36,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.successHandler(customAuthenticationSuccessHandler())
 			.failureHandler(customAuthenticationFailureHandler())
 			.permitAll()
+		.and()
+			.logout().permitAll()
         ;
 	}
 
