@@ -2,6 +2,7 @@ package com.wei.entity;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,6 +13,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name="course")
@@ -22,17 +24,18 @@ public class Course {
 	@Column(name="id")
 	private int id;
 	
+	@NotNull(message="is required")
 	@Column(name="name")
 	private String name;
 	
-	@Column(name="desciption")
-	private String desciption;
+	@Column(name="description")
+	private String description;
 	
 	@ManyToOne
 	@JoinColumn(name="instructor_id")
 	private Users instructor;
 	
-	@ManyToMany
+	@ManyToMany(cascade=CascadeType.REMOVE)
 	@JoinTable(
 			name="course_student",
 			joinColumns=@JoinColumn(name="student_id"),
@@ -43,10 +46,10 @@ public class Course {
 	public Course() {
 	}
 
-	public Course(int id, String name, String desciption, Users instructor) {
+	public Course(int id, String name, String description, Users instructor) {
 		this.id = id;
 		this.name = name;
-		this.desciption = desciption;
+		this.description = description;
 		this.instructor = instructor;
 	}
 
@@ -66,12 +69,12 @@ public class Course {
 		this.name = name;
 	}
 
-	public String getDesciption() {
-		return desciption;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setDesciption(String desciption) {
-		this.desciption = desciption;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public Users getInstructor() {
@@ -92,7 +95,7 @@ public class Course {
 
 	@Override
 	public String toString() {
-		return "Course [id=" + id + ", name=" + name + ", desciption=" + desciption + "]";
+		return "Course [id=" + id + ", name=" + name + ", description=" + description + ", instructorId=" + instructor.getId() + "]";
 	}
 	
 }

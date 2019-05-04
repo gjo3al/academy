@@ -39,4 +39,20 @@ create table audit(
     constraint uq_users_id_timeatamp unique(users_id, timeatamp)
 );
 
+create table course(
+	id int not null auto_increment primary key,
+    name varchar(20) not null,
+	description varchar(200),
+    instructor_id int not null,
+    index (instructor_id),
+    constraint fk_course_users foreign key(instructor_id) references users(id)
+);
+
+create table course_student(
+	student_id int,
+    course_id int,
+    constraint fk_student_course foreign key(student_id) references users(id),
+    constraint fk_course_student foreign key(course_id) references course(id)
+);
+
 SET FOREIGN_KEY_CHECKS = 1;

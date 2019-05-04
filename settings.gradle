@@ -11,11 +11,12 @@ include 'academy-audit-repository'
 include 'academy-audit'
 
 include 'academy-course-interface'
+include 'academy-course-repository'
+include 'academy-course'
 
 include 'academy-shared'
 include 'academy-web'
 include 'academy-security'
-
 
 rootProject.name = 'academy'
 

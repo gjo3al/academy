@@ -7,20 +7,12 @@
 <head>
 <meta charset="UTF-8">
 <title>重設密碼</title>
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">	
-<!-- Reference Bootstrap files -->
-<link rel="stylesheet"
-	 href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-	
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
-	
-<script	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
-<style>
-.error {
-	color: red
-}
-</style>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- Reference Bootstrap files -->
+  <link rel="stylesheet"
+	 href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">	
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+  <script	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
   <div id="loginbox" style="margin-top: 50px;"
@@ -36,7 +28,7 @@
 				   method="POST" class="form-horizontal">
 		  <div class="form-group">
   	  		<div class="col-xs-15">
-  	    	  <c:if test="${error != null}">
+  	    	  <c:if test="${resetError != null}">
 		        <div class="alert alert-danger col-xs-offset-1 col-xs-10">
 		          	請輸入相同的密碼
 		        </div>
@@ -61,12 +53,21 @@
 	  		<span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
 	  		  <input type="password" name="matchingPassword" placeholder="再次輸入新密碼" class="form-control">	
 		  </div>
-  	      
-  	      <button type="submit" class="btn btn-primary">
-	 		 送出
-		  </button>
 		  
-		  <a href="${pageContext.request.contextPath}" class="btn btn-success">首頁</a> 
+		  <div style="margin-top: 10px" class="form-group">						
+			<div class="col-sm-6 controls">
+			  <button type="submit" class="btn btn-primary">
+	 		 	送出
+		      </button>
+			</div>
+		  </div>
+		  
+		  <div style="margin-top: 10px" class="form-group">						
+			<div class="col-sm-6 controls">
+			  <a href="${pageContext.request.contextPath}" 
+			     class="btn btn-success">回到首頁</a>
+			</div>
+		  </div>
 		</form:form>
 	  </div>
 	</div>

@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.wei.entity.Audit;
 import com.wei.entity.Users;
 import com.wei.repository.AuditRepository;
-import com.wei.repository.UserRepository;
 
 @Service
 @Transactional
@@ -18,9 +17,6 @@ public class AuditService {
 
 	@Autowired
 	private AuditRepository auditRepository;
-	
-	@Autowired
-	private UserRepository userRepository;
 	
 	public Audit create(Users user, String address) {
 		
@@ -35,16 +31,12 @@ public class AuditService {
 		return auditRepository.create(audit);
 	}
 	
-	public List<Audit> readAll(String username) {
-
-		int userId = userRepository.findByUserName(username).getId();
+	public List<Audit> readAll(int userId) {
 		
 		return auditRepository.readAll(userId);
 	}
 
-	public void deleteAll(String username) {
-
-		int userId = userRepository.findByUserName(username).getId();
+	public void deleteAll(int userId) {
 		
 		auditRepository.deleteAll(userId);
 	}

@@ -19,6 +19,12 @@ import com.wei.service.UserService;
 @RequestMapping("/users")
 public class UserController {
 
+	private final String RESET_SUCCESS_MESSAGE = "已寄送新密碼，請至電子信箱中確認";
+	
+	private final String RESET_SUCCESS_TITLE = "寄送新密碼";
+	
+	private final String LOGIN_WITH_NEW_PASSWORD = "請以新密碼登入";
+	
 	@Autowired
 	private UserService userService;
 	
@@ -34,14 +40,16 @@ public class UserController {
 			Model theModel
 			) {
 		
-		String path = "reset-notation";
+		String path = "notation";
 		
 		if(username == null || email == null
 			|| !userService.isUsernameAndEmailMatched(username, email)) {
-			theModel.addAttribute("error", "");
+			theModel.addAttribute("forgetError", "");
 			path = "forget-password";
 		} else {
 			userService.passwordResetLink(username);
+			theModel.addAttribute("title", RESET_SUCCESS_TITLE);
+			theModel.addAttribute("message", RESET_SUCCESS_MESSAGE);
 		}
 	
 		return path;
@@ -74,13 +82,16 @@ public class UserController {
 		String path;
 		
 		if(newPassword == null || !newPassword.equals(matchingPassword)) {
-			theModel.addAttribute("error", "");
+			theModel.addAttribute("resetError", "");
 			theModel.addAttribute("user", theUser);
 			path = "reset-password-form";
 		} else {
 			userService.resetPassword(theUser, newPassword);
+			
+			//重設密碼後必須以新密碼登入
 			try {
 				request.logout();
+				theModel.addAttribute("loginError", LOGIN_WITH_NEW_PASSWORD);
 			} catch (ServletException e) {
 				e.printStackTrace();
 			}

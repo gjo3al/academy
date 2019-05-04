@@ -21,6 +21,8 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 
 	private final String SHOW_AUDITS_PATH = "audits/";
 	
+	private final String ROOT_PATH = "http://localhost:8080/academy-web/";
+	
 	@Autowired
 	private AuditService auditService;
 	
@@ -38,20 +40,25 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 		SavedRequest savedRequest = (SavedRequest)
 				request.getSession().getAttribute("SPRING_SECURITY_SAVED_REQUEST"); 
 		
-		String redirectPath = savedRequest.getRedirectUrl();
+		String redirectPath = 
+				savedRequest == null? 
+						"":savedRequest.getRedirectUrl();
+		
+		if(redirectPath.equals(ROOT_PATH)) redirectPath = "";
 		
 		String username = authentication.getName();
 		
 		Users user = userService.findByUserName(username);
 		
-		List<Audit> audits = auditService.readAll(username);
+		List<Audit> audits = auditService.readAll(user.getId());
 		
 		request.getSession().setAttribute("user", user);
 		
 		request.getSession().setAttribute("audits", audits);
 		
-		if(audits.size() > 0) {
-			redirectPath = SHOW_AUDITS_PATH + username;
+		// consider if exist previous url
+		if(audits.size() > 0 && redirectPath.equals("")) {
+			redirectPath = SHOW_AUDITS_PATH + user.getId();
 		}
 		
 		response.sendRedirect(redirectPath);

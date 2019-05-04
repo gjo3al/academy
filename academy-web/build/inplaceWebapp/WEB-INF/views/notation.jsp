@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>驗證結果</title>
+<title>${title}</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -12,9 +12,9 @@
 </head>
 <body>
 <div class="container">
-  <h3>${result}</h3>
+  <h3>${message}</h3>
   <br>
-  <a href="${pageContext.request.contextPath}" class="btn btn-success">首頁</a>  
+  <a href="${pageContext.request.contextPath}" class="btn btn-success">回到首頁</a>  
 </div>
 </body>
 </html>

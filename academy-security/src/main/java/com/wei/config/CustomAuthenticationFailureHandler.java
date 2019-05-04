@@ -16,6 +16,8 @@ import com.wei.service.UserService;
 
 public class CustomAuthenticationFailureHandler implements AuthenticationFailureHandler {
 
+	private final String INVALID_LOGIN = "無效的帳號或密碼";
+	
 	@Autowired
 	private UserService userService;
 	
@@ -37,7 +39,7 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
 			writeAudit(user, request.getRemoteAddr());
 		}
 		
-		request.getSession().setAttribute("error", "");
+		request.getSession().setAttribute("loginError", INVALID_LOGIN);
 		response.sendRedirect("showLoginPage");
 	}
 

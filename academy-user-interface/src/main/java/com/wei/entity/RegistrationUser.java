@@ -8,28 +8,28 @@ import javax.validation.constraints.NotNull;
 import com.wei.validation.FieldMatch;
 
 @FieldMatch.List({
-	 @FieldMatch(first = "userInfo.users.password", second = "matchingPassword", 
+	 @FieldMatch(first = "user.password", second = "matchingPassword", 
 			 message = "The password fields must match")
 	})
 public class RegistrationUser {
 	
 	@Valid
-	private UserInfo userInfo;
+	private Users user;
 	
 	@NotNull(message="is required")
 	private String matchingPassword;
-
+	
 	private List<String> authorities;
 	
 	public RegistrationUser() {
 	}
 
-	public UserInfo getUserInfo() {
-		return userInfo;
+	public Users getUser() {
+		return user;
 	}
 
-	public void setUserInfo(UserInfo userInfo) {
-		this.userInfo = userInfo;
+	public void setUser(Users user) {
+		this.user = user;
 	}
 
 	public String getMatchingPassword() {
@@ -46,14 +46,6 @@ public class RegistrationUser {
 
 	public void setAuthorities(List<String> authorities) {
 		this.authorities = authorities;
-	}
-
-	public String getUsername() {
-		return userInfo.getUsername();
-	}
-	
-	public String getEmail() {
-		return userInfo.getEmail();
 	}
 
 }

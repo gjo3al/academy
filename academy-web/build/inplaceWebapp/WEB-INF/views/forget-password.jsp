@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>ForGet Password</title>
+<title>忘記密碼</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -25,9 +25,9 @@
   			method="POST" class="form-horizontal">
   	<div class="form-group">
   	  <div class="col-xs-15">
-  	    <c:if test="${error != null}">
+  	    <c:if test="${forgetError != null}">
 		  <div class="alert alert-danger col-xs-offset-1 col-xs-10">
-		    Invalid username or email.
+		    無效的帳號或電子信箱
 		  </div>
 		</c:if>
   	  </div>
@@ -35,12 +35,12 @@
   	
     <div style="margin-bottom: 25px" class="input-group">
 	  <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span> 					
-	  <input type="text" name="username" placeholder="username" class="form-control">
+	  <input type="text" name="username" placeholder="帳號" class="form-control">
 	</div>
 	
 	<div style="margin-bottom: 25px" class="input-group">
 	  <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span> 					
-	  <input type="text" name="email" placeholder="email" class="form-control">
+	  <input type="text" name="email" placeholder="電子信箱" class="form-control">
 	</div>
 	
 	<button type="submit" class="btn btn-primary">

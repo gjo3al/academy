@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Register form</title>
+<title>註冊</title>
 <meta name="viewport"
 				content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -26,98 +26,108 @@
 </style>
 </head>
 <body>
-	<div>
-		<div id="loginbox" style="margin-top: 50px;"
-			class="mainbox col-md-3 col-md-offset-2 col-sm-6 col-sm-offset-2">	
-			<div class="panel panel-primary">
-				<div class="panel-heading">
-					<div class="panel-title">Register New User</div>
-				</div>
-				<div style="padding-top: 30px" class="panel-body">
-					<form:form method="POST"
-							action="${pageContext.request.contextPath}/register/process"
-							modelAttribute="registrationUser"
-							class="form-horizontal">
-						<div class="form-group">
-							<div class="col-xs-15">
-								<div>
-								<!-- Check for registration error -->
-									<c:if test="${registrationError != null}">
-										<div class="alert alert-danger col-xs-offset-1 col-xs-10">
-											${registrationError}</div>
-									</c:if>
-								</div>
-							</div>
-						</div>
-						<div style="margin-bottom: 25px" class="input-group">
-							<span class="input-group-addon">
-								<i class="glyphicon glyphicon-user"></i>
-							</span>
-							<form:errors path="userInfo.users.username"
-										cssClass="error" />
-							<form:input path="userInfo.users.username"
-										placeholder="username (*)"
-										class="form-control" />
-						</div>
-						<div style="margin-bottom: 25px"
-							class="input-group">
-							<span class="input-group-addon">
-								<i class="glyphicon glyphicon-lock"></i>
-							</span>
-							<form:errors path="userInfo.users.password"
-										cssClass="error" />
-							<form:password path="userInfo.users.password"
-										placeholder="password (*)"
-										class="form-control" />
-						</div>
-						<div style="margin-bottom: 25px"
-							class="input-group">
-							<span class="input-group-addon">
-								<i class="glyphicon glyphicon-lock"></i>
-							</span>
-							<form:errors path="matchingPassword"
-										cssClass="error" />
-							<form:password path="matchingPassword"
-										placeholder="matchingPassword (*)"
-										class="form-control" />
-						</div>
-						<div style="margin-bottom: 25px"
-							class="input-group">
-							<span class="input-group-addon">
-								<i class="glyphicon glyphicon-user"></i>
-							</span>
-							<form:input	path="userInfo.userDetail.nickname"
-										placeholder="nickname"
-										class="form-control" />
-						</div>
-						<div style="margin-bottom: 25px"
-							class="input-group">
-							<span class="input-group-addon">
-								<i class="glyphicon glyphicon-user"></i>
-							</span>
-							<form:errors path="userInfo.userDetail.email"
-										cssClass="error" />
-							<form:input path="userInfo.userDetail.email"
-										placeholder="email (*)"
-										class="form-control" />
-						</div>
-						<div style="margin-bottom: 25px"
-							class="input-group">
-							<form:checkboxes path="authorities"
-											items="${authorities}"
-											class="form-check" />
-						</div>
-						<div style="margin-top: 10px" class="form-group">
-							<div class="col-sm-6 controls">
-								<button type="submit"
-										class="btn btn-primary">Register
-								</button>
-							</div>
-						</div>
-					</form:form>
-				</div>
-			</div>
+  <div>
+	<div id="loginbox" style="margin-top: 50px;"
+		class="mainbox col-md-3 col-md-offset-2 col-sm-6 col-sm-offset-2">	
+	  <div class="panel panel-primary">
+		<div class="panel-heading">
+	      <div class="panel-title">註冊</div>
 		</div>
+		<div style="padding-top: 30px" class="panel-body">
+		  <form:form method="POST"
+					action="${pageContext.request.contextPath}/register/process"
+					modelAttribute="registrationUser"
+					class="form-horizontal">
+					
+			<div class="form-group">
+	  		  <div class="col-xs-15">
+				<!-- Check for registration error -->
+				<c:if test="${registrationError != null}">
+  				  <div class="alert alert-danger col-xs-offset-1 col-xs-10">
+					${registrationError}
+				  </div>
+				</c:if>
+	  		  </div>
+			</div>
+			
+			<div style="margin-bottom: 25px" class="input-group">
+	  		  <span class="input-group-addon">
+				<i class="glyphicon glyphicon-user"></i>
+	  		  </span>
+			  <form:errors path="userInfo.users.username"
+						cssClass="error" />
+	    	  <form:input path="userInfo.users.username"
+						placeholder="帳號 (*)"
+						class="form-control" />
+			</div>
+			
+			<div style="margin-bottom: 25px"
+				class="input-group">
+   			  <span class="input-group-addon">
+				<i class="glyphicon glyphicon-lock"></i>
+			  </span>
+			  <form:errors path="userInfo.users.password"
+						cssClass="error" />
+  			  <form:password path="userInfo.users.password"
+							placeholder="密碼 (*)"
+							class="form-control" />
+			</div>
+			
+			<div style="margin-bottom: 25px"
+				class="input-group">
+	  		  <span class="input-group-addon">
+				<i class="glyphicon glyphicon-lock"></i>
+			  </span>
+			  <form:errors path="matchingPassword"
+						cssClass="error" />
+			  <form:password path="matchingPassword"
+							placeholder="確認密碼 (*)"
+							class="form-control" />
+			</div>
+			
+			<div style="margin-bottom: 25px"
+				class="input-group">
+			  <span class="input-group-addon">
+				<i class="glyphicon glyphicon-user"></i>
+			  </span>
+			  <form:input path="userInfo.userDetail.nickname"
+						placeholder="暱稱"
+						class="form-control" />
+			</div>
+			
+			<div style="margin-bottom: 25px"
+				class="input-group">
+			  <span class="input-group-addon">
+				<i class="glyphicon glyphicon-envelope"></i>
+			  </span>
+			  <form:errors path="userInfo.userDetail.email"
+						cssClass="error" />
+			  <form:input path="userInfo.userDetail.email"
+						placeholder="電子信箱 (*)"
+						class="form-control" />
+			</div>
+			
+			<div style="margin-bottom: 25px"
+				class="input-group">
+			  <form:checkboxes path="authorities"
+							items="${authorities}"
+							class="form-check" />
+			</div>
+			
+			<div style="margin-top: 10px" class="form-group">
+			  <div class="col-sm-6 controls">
+				<button type="submit"
+						class="btn btn-primary">送出
+				</button>
+ 			  </div>
+			</div>
+			
+			<a href="${pageContext.request.contextPath}" class="btn btn-success">回到首頁</a> 
+			
+		  </form:form>
+		</div>
+	  </div>
 	</div>
+  </div>
 </body>
 </html>

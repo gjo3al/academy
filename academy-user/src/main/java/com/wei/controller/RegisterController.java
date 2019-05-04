@@ -25,7 +25,13 @@ import com.wei.service.UserService;
 @RequestMapping("/register")
 public class RegisterController {
 
+	private final String REGISTER_SUCCESS_TITLE = "註冊成功";
+	
+	private final String REGISTER_SUCCESS_MESSAGE = "註冊成功，請至電子信箱收取驗證信";
+	
 	private final String USER_HAS_EXISTED = "User name or email already exists."; 
+	
+	private final String VERIFY_TITLE = "驗證結果";
 	
 	private final String VERIFY_SUCCESS_MESSAGE = "驗證成功，按以下連結回首頁";
 	
@@ -47,7 +53,7 @@ public class RegisterController {
 		authorities.put("ROLE_TEACHER", "Teacher");
 	}
 	
-	@RequestMapping("")
+	@GetMapping("")
 	public String showRegisterForm(Model theModel) {
 		
 		initRegistrationForm(theModel);
@@ -55,7 +61,7 @@ public class RegisterController {
 		return "register-form";
 	}
 	
-	@PostMapping("/process")
+	@PostMapping("")
 	public String processRegistration(
 			@Valid @ModelAttribute("registrationUser")RegistrationUser registrationUser, 
 			BindingResult bindingResult ,Model theModel) {
@@ -65,9 +71,9 @@ public class RegisterController {
 			return "register-form";
 		}
 		
-		String username = registrationUser.getUsername();
+		String username = registrationUser.getUser().getUsername();
 		
-		String email = registrationUser.getEmail();
+		String email = registrationUser.getUser().getEmail();
 		
 		if(doesUserOrEmailExist(username, email)) {
 			initRegistrationForm(theModel);
@@ -77,7 +83,11 @@ public class RegisterController {
 		
 		registerService.register(registrationUser);
 		
-		return "register-success";
+		theModel.addAttribute("title", REGISTER_SUCCESS_TITLE);
+		
+		theModel.addAttribute("message", REGISTER_SUCCESS_MESSAGE);
+		
+		return "notation";
 	}
 	
 	@GetMapping("/verify")
@@ -88,19 +98,21 @@ public class RegisterController {
 		
 		Users theUser = userService.verify(email, token);
 		
+		theModel.addAttribute("title", VERIFY_TITLE);
+		
 		if(theUser != null) {
 			if(theUser.isEnabled()) {
-				theModel.addAttribute("result", HAS_VERIFY_MESSAGE);
+				theModel.addAttribute("message", HAS_VERIFY_MESSAGE);
 			}else {
 				theUser.setEnabled(true);
 				userService.update(theUser);
-				theModel.addAttribute("result", VERIFY_SUCCESS_MESSAGE);
+				theModel.addAttribute("message", VERIFY_SUCCESS_MESSAGE);
 			}
 		} else {
-			theModel.addAttribute("result", VERIFY_FAIL_MESSAGE);
+			theModel.addAttribute("message", VERIFY_FAIL_MESSAGE);
 		}
 		
-		return "verify-result";
+		return "notation";
 	}
 	
 	private void initRegistrationForm(Model theModel) {

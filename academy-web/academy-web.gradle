@@ -24,4 +24,7 @@ dependencies {
 	implementation 'org.springframework:spring-webmvc:5.1.5.RELEASE'
 	implementation 'javax.servlet:jstl:1.2'
 	compileOnly 'javax.servlet.jsp:javax.servlet.jsp-api:2.3.3' 
+	
+	implementation 'org.springframework.security:spring-security-taglibs:5.1.5.RELEASE'
+	
 }

@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.wei.entity.Users;
@@ -19,21 +18,21 @@ public class AuditController {
 	@Autowired
 	private AuditService auditService;
 	
-	@GetMapping("/{username}")
-	public String showAudits(@PathVariable String username, HttpSession session) {
+	@GetMapping("/{userId}")
+	public String showAudits(@PathVariable int userId, HttpSession session) {
 		
 		Users user = (Users)session.getAttribute("user");
 		
-		if(user != null && user.getUsername().equals(username)) {
+		if(user.getId() == userId) {
 			return "audits";
 		}
 		return "redirect:/";
 	}
 	
-	@PostMapping("/delete/{username}")
-	public String deleteAudits(@PathVariable String username) {
+	@GetMapping("/delete/{userId}")
+	public String deleteAudits(@PathVariable int userId) {
 		
-		auditService.deleteAll(username);
+		auditService.deleteAll(userId);
 		
 		return "redirect:/";
 	}

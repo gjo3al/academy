@@ -13,8 +13,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 @Entity
 @Table(name="users")
@@ -25,20 +25,18 @@ public class Users {
 	@Column(name="id")
 	private int id;
 	
-	@NotNull
-	@Size(min=1, message="is required")
+	@NotNull(message="is required")
 	@Column(name="username")
 	private String username;
 	
-	@NotNull
-	@Size(min=1, message="is required")
+	@NotNull(message="is required")
 	@Column(name="password")
 	private String password;
 	
-	@NotNull
 	@Column(name="enabled")
 	private boolean enabled;
 	
+	@Valid
 	@OneToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="detail_id")
 	private UserDetail userDetail;

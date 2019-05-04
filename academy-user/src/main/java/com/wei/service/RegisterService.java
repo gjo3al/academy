@@ -12,7 +12,7 @@ import com.wei.entity.Authorities;
 import com.wei.entity.RegistrationUser;
 import com.wei.entity.UserDetail;
 import com.wei.entity.Users;
-import com.wei.repository.AuthoritiesRepository;
+import com.wei.repository.AuthoritiesRepositoryImpl;
 import com.wei.repository.UserRepository;
 
 @Service
@@ -23,7 +23,7 @@ public class RegisterService {
 	private UserRepository userRepository;
 
 	@Autowired
-	private AuthoritiesRepository authoritiesRepository;
+	private AuthoritiesRepositoryImpl authoritiesRepository;
 
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
@@ -54,9 +54,9 @@ public class RegisterService {
 	}
 	
 	private Users registerUser(RegistrationUser registerData) {
-		Users theUser = registerData.getUserInfo().getUsers();
+		Users theUser = registerData.getUser();
 
-		UserDetail detail = registerData.getUserInfo().getUserDetail();
+		UserDetail detail = registerData.getUser().getUserDetail();
 
 		theUser.setUserDetail(detail);
 

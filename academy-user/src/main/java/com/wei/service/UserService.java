@@ -22,6 +22,11 @@ public class UserService {
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
 	
+	public Users read(int id) {
+		
+		return userRepository.read(id);
+	}
+	
 	public Users create(Users domainObject) {
 		
 		return userRepository.create(domainObject);
@@ -78,10 +83,12 @@ public class UserService {
 		
 		Users userByName = findByUserName(username);
 		
-		String userEmail = userByName.getEmail();
+		if(userByName != null) {
+			String userEmail = userByName.getEmail();
 		
-		if(userEmail.equals(email)) {
-			matched = true;
+			if(userEmail.equals(email)) {
+				matched = true;
+			}
 		}
 		
 		return matched;
@@ -101,7 +108,5 @@ public class UserService {
 	private String generatePassword(Users theUser) {
 		return passwordEncoder.encode(theUser.toString());
 	}
-	
-	
 
 }
