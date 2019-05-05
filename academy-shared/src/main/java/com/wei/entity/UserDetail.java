@@ -1,22 +1,27 @@
 package com.wei.entity;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.wei.validation.ValidEmail;
 
+@SuppressWarnings("serial")
 @Entity
 @Table(name="user_detail")
-public class UserDetail {
+@IdClass(Users.class)
+public class UserDetail implements Serializable {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="id")
-	private int id;
+	@OneToOne
+	@JoinColumn(name="users_id")
+	private Users user;
 	
 	@Column(name="nickname")
 	private String nickname;
@@ -24,23 +29,16 @@ public class UserDetail {
 	@ValidEmail
 	@Column(name="email")
 	private String email;
-
+	
 	public UserDetail() {
-
+	}
+	
+	public Users getUser() {
+		return user;
 	}
 
-	public UserDetail(int id, String nickname, String email) {
-		this.id = id;
-		this.nickname = nickname;
-		this.email = email;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
+	public void setUser(Users user) {
+		this.user = user;
 	}
 
 	public String getNickname() {
@@ -58,10 +56,10 @@ public class UserDetail {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
+	
 	@Override
 	public String toString() {
-		return "UserDetail [id=" + id + ", nickname=" + nickname + ", email=" + email + "]";
+		return "UserDetail [id=" + user.getId() + ", nickname=" + nickname + ", email=" + email + "]";
 	}
 
 }

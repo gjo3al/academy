@@ -20,7 +20,6 @@ public class UserRepositoryImpl implements UserRepository {
 		Session session = factory.getCurrentSession();
 
 		return session.get(Users.class, id);
-		
 	}
 	
 	@Override
@@ -35,6 +34,7 @@ public class UserRepositoryImpl implements UserRepository {
 
 	@Override
 	public Users update(Users domainObject) {
+		
 		Session session = factory.getCurrentSession();
 
 		session.saveOrUpdate(domainObject);
@@ -44,6 +44,7 @@ public class UserRepositoryImpl implements UserRepository {
 
 	@Override
 	public Users delete(String username) {
+		
 		Session session = factory.getCurrentSession();
 
 		Users deleted = session.get(Users.class, username);

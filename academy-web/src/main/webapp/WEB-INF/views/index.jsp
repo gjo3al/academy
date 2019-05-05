@@ -14,7 +14,7 @@
 </head>
   <body>
   <div style="padding-left: 70px">
-    <h1 class="well">Hello ${user.nickname}!</h1>
+    <h1 class="well">Hello ${user.userDetail.nickname}!</h1>
       <br>
       <form:form action="${pageContext.request.contextPath}" method="POST">
       <div style="margin-bottom: 25px"

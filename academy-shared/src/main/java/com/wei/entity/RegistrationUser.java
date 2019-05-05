@@ -47,5 +47,13 @@ public class RegistrationUser {
 	public void setAuthorities(List<String> authorities) {
 		this.authorities = authorities;
 	}
+	
+	public String getUsername() {
+		return user.getUsername();
+	}
+	
+	public String getEmail() {
+		return user.getUserDetail().getEmail();
+	}
 
 }

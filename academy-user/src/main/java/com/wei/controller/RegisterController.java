@@ -71,9 +71,9 @@ public class RegisterController {
 			return "register-form";
 		}
 		
-		String username = registrationUser.getUser().getUsername();
+		String username = registrationUser.getUsername();
 		
-		String email = registrationUser.getUser().getEmail();
+		String email = registrationUser.getEmail();
 		
 		if(doesUserOrEmailExist(username, email)) {
 			initRegistrationForm(theModel);

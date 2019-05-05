@@ -15,7 +15,7 @@
 </head>
 <body>
 <div class="container">
-  <h3>${instructor.nickname}提供的課程</h3>
+  <h3>${instructor.userDetail.nickname}提供的課程</h3>
   <a href="${pageContext.request.contextPath}/courses/${user.id}/create" class="btn btn-primary">新增課程</a>
   <hr>
   
@@ -71,7 +71,7 @@
 	</table>
   </c:when>
   <c:otherwise>
-    <h4>${instructor.nickname}尚未提供任何課程</h4>
+    <h4>${instructor.userDetail.nickname}尚未提供任何課程</h4>
   </c:otherwise>
   </c:choose>
   <hr>

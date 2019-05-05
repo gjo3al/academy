@@ -46,6 +46,7 @@ public class AuditRepositoryImpl implements AuditRepository {
 		
 		Session session = factory.getCurrentSession();
 		
+		@SuppressWarnings("rawtypes")
 		Query theQuery = session.createQuery(
 				"delete from Audit where user.id=:userId");
 		

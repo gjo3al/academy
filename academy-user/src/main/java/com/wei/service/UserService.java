@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.wei.email.EmailService;
 import com.wei.entity.Users;
+import com.wei.repository.UserDetailRepository;
 import com.wei.repository.UserRepository;
 
 @Service
@@ -15,6 +16,9 @@ public class UserService {
 	
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private UserDetailRepository userDetailRepository;
 	
 	@Autowired
 	private EmailService emailService;
@@ -40,19 +44,19 @@ public class UserService {
 		return userRepository.delete(username);
 	}
 
-	public Users findByUserName(String username) {		
+	public Users findByUserName(String username) {
 		return userRepository.findByUserName(username);
 	}
 	
 	public Users findByEmail(String email) {
 		return userRepository.findByEmail(email);
 	}
-
+	
 	public void passwordResetLink(String username) {
 		
 		Users theUser =  findByUserName(username);
 		
-		String email = theUser.getEmail();
+		String email = userDetailRepository.read(theUser.getId()).getEmail();
 		
 		String newPassword = generatePassword(theUser);
 		
@@ -84,7 +88,7 @@ public class UserService {
 		Users userByName = findByUserName(username);
 		
 		if(userByName != null) {
-			String userEmail = userByName.getEmail();
+			String userEmail = userDetailRepository.read(userByName.getId()).getEmail();
 		
 			if(userEmail.equals(email)) {
 				matched = true;

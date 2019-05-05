@@ -9,7 +9,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -35,12 +34,11 @@ public class Users {
 	
 	@Column(name="enabled")
 	private boolean enabled;
-	
-	@Valid
-	@OneToOne(cascade=CascadeType.ALL)
-	@JoinColumn(name="detail_id")
-	private UserDetail userDetail;
 
+	@Valid
+	@OneToOne(mappedBy="user", cascade=CascadeType.ALL)
+	private UserDetail userDetail;
+	
 	@OneToMany(mappedBy="user", cascade=CascadeType.ALL)
 	private List<Authorities> authorities;
 	
@@ -82,7 +80,7 @@ public class Users {
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
 	}
-
+	
 	public UserDetail getUserDetail() {
 		return userDetail;
 	}
@@ -90,21 +88,13 @@ public class Users {
 	public void setUserDetail(UserDetail userDetail) {
 		this.userDetail = userDetail;
 	}
-	
+
 	public List<Authorities> getAuthorities() {
 		return authorities;
 	}
 
 	public void setAuthorities(List<Authorities> authorities) {
 		this.authorities = authorities;
-	}
-	
-	public String getNickname() {
-		return userDetail.getNickname();
-	}
-	
-	public String getEmail() {
-		return userDetail.getEmail();
 	}
 
 	public void addAuthority(String role) {
@@ -113,10 +103,10 @@ public class Users {
 		Authorities authority = new Authorities(username, this);
 		authorities.add(authority);
 	}
-
+	
 	@Override
 	public String toString() {
-		return "Users [id=" + id + ", username=" + username + ", password=" + password + ", enabled=" + enabled  + ", detail=" + userDetail + "]";
+		return "Users [id=" + id + ", username=" + username + ", password=" + password + ", enabled=" + enabled + "]";
 	}
 	
 }

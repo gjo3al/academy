@@ -40,7 +40,7 @@
 		  <form:hidden path="username"/>
 		  <form:hidden path="password"/>
 		  <form:hidden path="enabled"/>
-		  <form:hidden path="userDetail.id"/>
+		  <form:hidden path="userDetail.user.id"/>
 		  <form:hidden path="userDetail.nickname"/>
 		  <form:hidden path="userDetail.email"/>
 		  

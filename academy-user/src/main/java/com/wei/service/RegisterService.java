@@ -13,6 +13,7 @@ import com.wei.entity.RegistrationUser;
 import com.wei.entity.UserDetail;
 import com.wei.entity.Users;
 import com.wei.repository.AuthoritiesRepositoryImpl;
+import com.wei.repository.UserDetailRepository;
 import com.wei.repository.UserRepository;
 
 @Service
@@ -22,6 +23,9 @@ public class RegisterService {
 	@Autowired
 	private UserRepository userRepository;
 
+	@Autowired
+	private UserDetailRepository userDetailRepository;
+	
 	@Autowired
 	private AuthoritiesRepositoryImpl authoritiesRepository;
 
@@ -39,6 +43,8 @@ public class RegisterService {
 
 		Users theUser = registerUser(registerData); 
 		
+		String email = registerData.getEmail();
+		
 		List<String> registerAuthorites = registerData.getAuthorities();
 		
 		registerAuthorites.add(DEFAULT_AUTHORITY);
@@ -50,18 +56,19 @@ public class RegisterService {
 			authoritiesRepository.create(auth);
 		});
 		
-		emailService.validationLink(theUser.getEmail(), generateToken(theUser));
+		emailService.validationLink(email, generateToken(theUser));
 	}
 	
 	private Users registerUser(RegistrationUser registerData) {
+		
 		Users theUser = registerData.getUser();
 
-		UserDetail detail = registerData.getUser().getUserDetail();
-
-		theUser.setUserDetail(detail);
-
+		UserDetail detail = theUser.getUserDetail();
+		
+		detail.setUser(theUser);
+		
 		theUser.setPassword(passwordEncoder.encode(theUser.getPassword()));
-
+		
 		theUser.setEnabled(false);
 		
 		return userRepository.create(theUser);

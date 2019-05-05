@@ -12,47 +12,12 @@ public class UserDetailRepositoryImpl implements UserDetailRepository {
 
 	@Autowired
 	private SessionFactory factory;
-	
-	@Override
-	public UserDetail create(UserDetail domainObject) {
-		
-		Session session = factory.getCurrentSession();
-		
-		session.save(domainObject);
-		
-		return domainObject;
-	}
 
 	@Override
 	public UserDetail read(int id) {
-		
-		Session session = factory.getCurrentSession();
-		
-		UserDetail result = session.get(UserDetail.class, id);
-		
-		return result;
-	}
 
-	@Override
-	public UserDetail update(UserDetail domainObject) {
-		
 		Session session = factory.getCurrentSession();
-		
-		session.saveOrUpdate(domainObject);
-		
-		return domainObject;
-	}
 
-	@Override
-	public UserDetail delete(int id) {
-		
-		Session session = factory.getCurrentSession();
-		
-		UserDetail deleted = session.get(UserDetail.class, id);
-		
-		session.delete(deleted);
-		
-		return deleted;
+		return session.get(UserDetail.class, id);
 	}
-
 }
