@@ -17,103 +17,73 @@ subprojects {
 	}
 }
 
-project(':academy-user-detail-interface') {
-
-    dependencies {
-        api project(':academy-shared')
-        
-    }
-}
-
 project(':academy-user-detail-repository') {
 
     dependencies {
-        api project(':academy-user-detail-interface')
+        api project(':academy-shared')
     }
 }
 
 project(':academy-user-detail') {
 
     dependencies {
-        api project(':academy-user-detail-interface')
+        api project(':academy-shared')
         api project(':academy-user-detail-repository')
     }
 }
 
 
-project(':academy-user-interface') {
-
-    dependencies {
-    
-        api project(':academy-shared')
-        
-        api project(':academy-user-detail-interface')
-    }
-}
-
 project(':academy-user-repository') {
 
     dependencies {
-        api project(':academy-user-interface')
+        api project(':academy-shared')
     }
 }
 
 project(':academy-user') {
 
     dependencies {
-        api project(':academy-user-interface')
+        api project(':academy-shared')
+        
         api project(':academy-user-repository')
         
         api project(':academy-user-detail')
     }
 }
 
-project(':academy-audit-interface') {
-
-    dependencies {
-        api project(':academy-shared')
-        
-        api project(':academy-user-interface')
-    }
-}
 
 project(':academy-audit-repository') {
 
     dependencies {
-        api project(':academy-audit-interface')
+        api project(':academy-shared')
     }
 }
 
 project(':academy-audit') {
 
     dependencies {
-        api project(':academy-audit-interface')
+        api project(':academy-shared')
+        
         api project(':academy-audit-repository')
     }
 }
 
-project(':academy-course-interface') {
-
-    dependencies {
-        api project(':academy-shared')
-        
-        api project(':academy-user-interface')
-    }
-}
 
 project(':academy-course-repository') {
 
     dependencies {
-        api project(':academy-course-interface')
+        api project(':academy-shared')
     }
 }
 
 project(':academy-course') {
 
     dependencies {
-    	api project(':academy-user')
     
-        api project(':academy-course-interface')
+    	api project(':academy-shared')
+    	
+    	api project(':academy-user')
+        
         api project(':academy-course-repository')
     }
 }

@@ -23,7 +23,7 @@
 	  </div>
 	  
 	  <div style="padding-top: 30px" class="panel-body">
-	    <form:form action="${pageContext.request.contextPath}/users/reset/process" 
+	    <form:form action="${pageContext.request.contextPath}/users/reset" 
 				   modelAttribute="user"
 				   method="POST" class="form-horizontal">
 		  <div class="form-group">

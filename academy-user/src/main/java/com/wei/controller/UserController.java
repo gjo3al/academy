@@ -19,11 +19,13 @@ import com.wei.service.UserService;
 @RequestMapping("/users")
 public class UserController {
 
-	private final String RESET_SUCCESS_MESSAGE = "已寄送新密碼，請至電子信箱中確認";
+	private final String SEND_NEW_PASSWORD_SUCCESS_TITLE = "寄送新密碼";
 	
-	private final String RESET_SUCCESS_TITLE = "寄送新密碼";
+	private final String SEND_NEW_PASSWORD_SUCCESS_MESSAGE = "已寄送新密碼，請至電子信箱中確認";
 	
-	private final String LOGIN_WITH_NEW_PASSWORD = "請以新密碼登入";
+	private final String RESET_SUCCESS_TITLE = "更改密碼";
+	
+	private final String RESET_SUCCESS_MESSAGE = "已更改密碼，請回到首頁重新登入";
 	
 	@Autowired
 	private UserService userService;
@@ -33,7 +35,7 @@ public class UserController {
 		return "forget-password";
 	}
 	
-	@PostMapping("/forget/process")
+	@PostMapping("/forget")
 	public String forgetPasswordProcess(
 			@RequestParam String username, 
 			@RequestParam String email,
@@ -48,8 +50,8 @@ public class UserController {
 			path = "forget-password";
 		} else {
 			userService.passwordResetLink(username);
-			theModel.addAttribute("title", RESET_SUCCESS_TITLE);
-			theModel.addAttribute("message", RESET_SUCCESS_MESSAGE);
+			theModel.addAttribute("title", SEND_NEW_PASSWORD_SUCCESS_TITLE);
+			theModel.addAttribute("message", SEND_NEW_PASSWORD_SUCCESS_MESSAGE);
 		}
 	
 		return path;
@@ -71,7 +73,7 @@ public class UserController {
 		return "redirect:/";
 	}
 	
-	@PostMapping("/reset/process")
+	@PostMapping("/reset")
 	public String resetPasswordProcess(
 			@ModelAttribute("user") Users theUser,
 			@RequestParam String newPassword, 
@@ -91,11 +93,12 @@ public class UserController {
 			//重設密碼後必須以新密碼登入
 			try {
 				request.logout();
-				theModel.addAttribute("loginError", LOGIN_WITH_NEW_PASSWORD);
+				theModel.addAttribute("title", RESET_SUCCESS_TITLE);
+				theModel.addAttribute("message", RESET_SUCCESS_MESSAGE);
 			} catch (ServletException e) {
 				e.printStackTrace();
 			}
-			path = "login";
+			path = "notation";
 		}
 		
 		return path;

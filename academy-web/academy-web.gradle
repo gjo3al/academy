@@ -11,13 +11,15 @@ plugins {
 gretty {
     servletContainer = 'jetty9.4'
     reloadOnClassChange=true
+    //change context path
+    contextPath = '/academy'  
 }
 
 ext.tomcatHome = 'C:/Apache Software Foundation/Tomcat 9.0'
 ext.tomcatWebapps = "$tomcatHome/webapps"
 
 war{
-	archiveName = 'academy-web.war'	
+	archiveName = 'academy.war'	
 }
 
 dependencies {

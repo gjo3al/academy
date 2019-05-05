@@ -21,7 +21,7 @@
       <div class="panel-title">忘記密碼</div>
   </div>
   <div style="padding-top: 30px" class="panel-body">
-  <form:form action="${pageContext.request.contextPath}/users/forget/process" 
+  <form:form action="${pageContext.request.contextPath}/users/forget" 
   			method="POST" class="form-horizontal">
   	<div class="form-group">
   	  <div class="col-xs-15">

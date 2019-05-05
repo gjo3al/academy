@@ -27,7 +27,7 @@ import com.wei.email.EmailService;
 @PropertySource("classpath:application.properties")
 public class GmailService implements EmailService {
 
-	private final String CONTEXT_PATH = "http://localhost:8080/academy-web";
+	private final String CONTEXT_PATH = "http://localhost:8080/academy";
 
 	private final String VERIFY_SUBJECT = "選課系統電子信箱驗證";
 	

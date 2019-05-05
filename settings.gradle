@@ -1,16 +1,12 @@
-include 'academy-user-detail-interface'
 include 'academy-user-detail-repository'
 include 'academy-user-detail'
 
-include 'academy-user-interface'
 include 'academy-user-repository'
 include 'academy-user'
 
-include 'academy-audit-interface'
 include 'academy-audit-repository'
 include 'academy-audit'
 
-include 'academy-course-interface'
 include 'academy-course-repository'
 include 'academy-course'
 

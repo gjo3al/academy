@@ -57,7 +57,7 @@
 			  <c:if test="${isSelf}">
 			  <a href="${pageContext.request.contextPath}/courses/${instructor.id}/${course.id}/update" class="btn btn-info">更新</a>
 			  <a href="${pageContext.request.contextPath}/courses/${instructor.id}/${course.id}/delete" class="btn btn-warning"
-			  	 onclick="if(!(confirm('確定要刪除紀錄?'))) return false">
+			  	 onclick="if(!(confirm('確定要刪除課程?'))) return false">
 			  	 刪除</a>
 			  </c:if>
 			  
