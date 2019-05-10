@@ -16,17 +16,7 @@
   <div style="padding-left: 70px">
     <h1 class="well">Hello ${user.userDetail.nickname}!</h1>
       <br>
-      <form:form action="${pageContext.request.contextPath}" method="POST">
-      <div style="margin-bottom: 25px"
-			class="input-group">
-      	<span class="input-group-addon">
-		  <i class="glyphicon glyphicon-search"></i>
-		</span>
-		<input type="text" name="theSearchName"/>
-		<input type="submit" value="Search" class="btn btn-primary"/>
-	  </div>
-      </form:form>
-      <br>
+
       <a href="${pageContext.request.contextPath}/courses/${user.id}/study" class="btn btn-info">選修的課程</a>
       
       <security:authorize access="hasRole('TEACHER')">

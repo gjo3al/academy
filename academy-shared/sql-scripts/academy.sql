@@ -51,6 +51,7 @@ create table course(
 create table course_student(
 	student_id int,
     course_id int,
+    primary key(student_id, course_id),
     constraint fk_student_course foreign key(student_id) references users(id),
     constraint fk_course_student foreign key(course_id) references course(id)
 );

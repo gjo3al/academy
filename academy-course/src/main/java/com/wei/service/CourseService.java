@@ -26,6 +26,14 @@ public class CourseService {
 		
 	}
 	
+	public List<Course> coursesByStudentId(int studentId) {
+		return courseRepository.coursesByStudentId(studentId);
+	}
+	
+	public List<Course> coursesByKeyword(String keyword) {
+		return courseRepository.coursesByKeyword(keyword);
+	}
+	
 	public Course saveOrUpdate(Course domainObject) {
 		return courseRepository.update(domainObject);
 	}
@@ -49,6 +57,14 @@ public class CourseService {
 		
 		return persistedCourse != null &&
 				persistedCourse.getId() != course.getId();
+	}
+
+	public void registerCourse(int studentId, int courseId) {
+		courseRepository.registerCourse(studentId, courseId);
+	}
+	
+	public void deleteStudyingCourse(int studentId, int courseId) {
+		courseRepository.deleteStudyingCourse(studentId, courseId);
 	}
 	
 }

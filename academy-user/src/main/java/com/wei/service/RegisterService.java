@@ -13,7 +13,6 @@ import com.wei.entity.RegistrationUser;
 import com.wei.entity.UserDetail;
 import com.wei.entity.Users;
 import com.wei.repository.AuthoritiesRepositoryImpl;
-import com.wei.repository.UserDetailRepository;
 import com.wei.repository.UserRepository;
 
 @Service
@@ -22,9 +21,6 @@ public class RegisterService {
 
 	@Autowired
 	private UserRepository userRepository;
-
-	@Autowired
-	private UserDetailRepository userDetailRepository;
 	
 	@Autowired
 	private AuthoritiesRepositoryImpl authoritiesRepository;

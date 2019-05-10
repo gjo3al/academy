@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>新增課程</title>
+<title>${title}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <!-- Reference Bootstrap files -->
   <link rel="stylesheet"
@@ -21,7 +21,7 @@
   <div class="panel panel-primary">
     <div class="panel panel-info">
       <div class="panel-heading">
-	    <div class="panel-title">新增課程</div>
+	    <div class="panel-title">${title}</div>
 	  </div>
     </div>
   

@@ -2,7 +2,6 @@ package com.wei.entity;
 
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -35,11 +34,11 @@ public class Course {
 	@JoinColumn(name="instructor_id")
 	private Users instructor;
 	
-	@ManyToMany(cascade=CascadeType.REMOVE)
+	@ManyToMany
 	@JoinTable(
 			name="course_student",
-			joinColumns=@JoinColumn(name="student_id"),
-			inverseJoinColumns=@JoinColumn(name="course_id")
+			joinColumns=@JoinColumn(name="course_id"),
+			inverseJoinColumns=@JoinColumn(name="student_id")
 			)
 	private List<Users> students;
 	

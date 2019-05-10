@@ -1,8 +1,8 @@
 package com.wei.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 import com.wei.entity.Course;
 import com.wei.entity.Users;
@@ -26,6 +28,12 @@ public class CourseController {
 	
 	private final String SHOW_OFFERED_COURSE = "redirect:/courses/%d/offer";
 	
+	private final String SHOW_STUDYING_COURSE = "redirect:/courses/%d/study";
+	
+	private final String CREATE_COURSE_TITLE = "新增課程";
+	
+	private final String UPDATE_COURSE_TITLE = "更新課程";
+	
 	@Autowired
 	private CourseService courseService;
 	
@@ -33,12 +41,16 @@ public class CourseController {
 	private UserService userService;
 	
 	@GetMapping("/{instructorId}/offer")
-	public String offeredCourses(@PathVariable int instructorId, 
-			HttpSession session, Model theModel) {
-		
-		Users user = (Users)session.getAttribute("user");
+	public String offeredCourses(
+			@PathVariable int instructorId, 
+			@SessionAttribute("user") Users user, 
+			Model theModel) {
 		
 		Users instructor = userService.read(instructorId);
+		
+		if(instructor == null || !isTeacher(instructorId)) {
+			return "offered-courses";
+		}
 		
 		theModel.addAttribute("instructor", instructor);
 		
@@ -54,15 +66,48 @@ public class CourseController {
 		return "offered-courses";
 	}
 	
-	@GetMapping("/{instructorId}/create")
-	public String showCreateCourse(@PathVariable int instructorId, 
-			HttpSession session, Model theModel) {
+	@GetMapping("/{studentId}/study")
+	public String studyingCourses(
+			@PathVariable int studentId, 
+			@SessionAttribute("user") Users user, 
+			Model theModel) {
 		
-		Users user = (Users)session.getAttribute("user");
+		if(!isSelf(user, studentId)) {
+			return "redirect:/";
+		}
+		
+		List<Course> courses = courseService.coursesByStudentId(studentId);
+		
+		if(!courses.isEmpty())
+			theModel.addAttribute("courses", courses);
+		
+		return "studying-courses";
+	}
+	
+	@PostMapping("/{studentId}/{courseId}/study")
+	public String registerCourse(
+			@PathVariable int studentId,
+			@PathVariable int courseId,
+			Model theModel) {
+		
+		courseService.registerCourse(studentId, courseId);
+		
+		theModel.addAttribute("registerSuccess", true);
+		
+		return String.format(SHOW_STUDYING_COURSE, studentId);
+	}
+	
+	@GetMapping("/{instructorId}/create")
+	public String showCreateCourse(
+			@PathVariable int instructorId, 
+			@SessionAttribute("user") Users user, 
+			Model theModel) {
 		
 		if(isSelf(user, instructorId) && isTeacher(instructorId)) {
 			
 			initCreateCourseForm(user, theModel);
+			
+			theModel.addAttribute("title", CREATE_COURSE_TITLE);
 			
 			return "create-course-form";
 		}
@@ -75,41 +120,29 @@ public class CourseController {
 			@Valid @ModelAttribute("course") Course course,
 			BindingResult bindingResult,
 			@PathVariable int instructorId,
-			HttpSession session, 
+			@SessionAttribute("user") Users user, 
 			Model theModel) {
-		
-		Users user = (Users)session.getAttribute("user");
 		
 		if(bindingResult.hasErrors()) {
 			initCreateCourseForm(user, theModel);
 			return "create-course-form";
 		}
-		
-		if(isSelf(user, instructorId) && 
-		   isTeacher(instructorId)) {
 			
-			if(courseService.hasDuplicateCourse(instructorId, course)) {		
-				theModel.addAttribute("duplicateCourse", true);
-				course.setName("");
-				theModel.addAttribute("course", course);
-				theModel.addAttribute("instructor", user);
-				return "create-course-form";
+		if(courseService.hasDuplicateCourse(instructorId, course)) {		
+			theModel.addAttribute("duplicateCourse", true);
+			course.setName("");
+			theModel.addAttribute("course", course);
+			theModel.addAttribute("instructor", user);
+			return "create-course-form";
+		} else {
+			int courseId = course.getId();
+			initCreateCourseForm(user, theModel);
+			
+			courseService.saveOrUpdate(course);
+			if(courseId != 0) {
+				theModel.addAttribute("updateSuccess", true);
 			} else {
-				int courseId = course.getId();
-				boolean isUpdate = false;
-				initCreateCourseForm(user, theModel);
-				
-				if(courseId != 0) {
-					isUpdate = true;
-					course = courseService.read(courseId);
-				}
-				
-				courseService.saveOrUpdate(course);
-				if(isUpdate) {
-					theModel.addAttribute("updateSuccess", true);
-				} else {
-					theModel.addAttribute("createSuccess", true);
-				}
+				theModel.addAttribute("createSuccess", true);
 			}
 		}
 		
@@ -120,41 +153,68 @@ public class CourseController {
 	public String updateCourse(
 			@PathVariable int instructorId, 
 			@PathVariable int courseId,
-			HttpSession session, Model theModel) {
-		
-		Users user = (Users)session.getAttribute("user");
-		
-		if(isSelf(user, instructorId) && isTeacher(instructorId)) {
+			@SessionAttribute("user") Users user, 
+			Model theModel) {
 			
-			theModel.addAttribute("instructor", user);
-			
-			theModel.addAttribute("course", courseService.read(courseId));
-			
-			return "create-course-form";
-		}
+		theModel.addAttribute("instructor", user);
 		
+		theModel.addAttribute("course", courseService.read(courseId));
+		
+		theModel.addAttribute("title", UPDATE_COURSE_TITLE);
+			
+		return "create-course-form";
+
+	}
+	
+	@PostMapping("/{instructorId}/{courseId}/offer/delete")
+	public String deleteOfferedCourse(
+			@PathVariable int instructorId, 
+			@PathVariable int courseId,
+			@SessionAttribute("user") Users user, 
+			Model theModel) {
+		
+		theModel.addAttribute("instructor", user);
+			
+		theModel.addAttribute("deleteSuccess", true);
+			
+		courseService.delete(courseId);
+
 		return String.format(SHOW_OFFERED_COURSE, instructorId);
 	}
 	
-	@GetMapping("/{instructorId}/{courseId}/delete")
-	public String deleteCourse(
-			@PathVariable int instructorId, 
+	@PostMapping("/{studentId}/{courseId}/study/delete")
+	public String deleteStudyingCourse(
+			@PathVariable int studentId, 
 			@PathVariable int courseId,
-			HttpSession session, Model theModel) {
-		
-		Users user = (Users)session.getAttribute("user");
-		
-		if(isSelf(user, instructorId) && isTeacher(instructorId)) {
+			Model theModel) {
 			
-			theModel.addAttribute("instructor", user);
+		theModel.addAttribute("deleteSuccess", true);
 			
-			theModel.addAttribute("deleteSuccess", true);
-			
-			courseService.delete(courseId);
-		}
+		courseService.deleteStudyingCourse(studentId, courseId);
 		
+		return String.format(SHOW_STUDYING_COURSE, studentId);
+	}
+	
+	@GetMapping("/search")
+	public String coursesByKeyword(
+			@RequestParam("keyword") String keyword,
+			@SessionAttribute("user") Users user,
+			Model theModel) {
 		
-		return String.format(SHOW_OFFERED_COURSE, instructorId);
+		List<Course> courses = courseService.coursesByKeyword(keyword);
+		
+		List<Integer> studyingCoursesId = 
+				courseService.coursesByStudentId(user.getId()).stream()
+				.map(Course::getId)
+				.collect(Collectors.toList());
+		
+		theModel.addAttribute("keyword", keyword);
+		
+		theModel.addAttribute("courses", courses);
+		
+		theModel.addAttribute("studyingCoursesId", studyingCoursesId);
+		
+		return "search-courses";
 	}
 	
 	private boolean isTeacher(int instructorId) {

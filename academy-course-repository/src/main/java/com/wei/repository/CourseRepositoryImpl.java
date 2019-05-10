@@ -71,6 +71,20 @@ public class CourseRepositoryImpl implements CourseRepository {
 	}
 
 	@Override
+	public List<Course> coursesByStudentId(int studentId) {
+		
+		Session session = factory.getCurrentSession();
+		
+		Query<Course> theQuery = session.createQuery(
+				"select c from Course c join c.students s where s.id=:studentId", 
+				Course.class);
+		
+		theQuery.setParameter("studentId", studentId);
+		
+		return theQuery.getResultList();
+	}
+	
+	@Override
 	public Course courseByInstructorIdAndName(int instructorId, String courseName) {
 		
 		Course course = null;
@@ -91,4 +105,63 @@ public class CourseRepositoryImpl implements CourseRepository {
 		return course;
 	}
 
+	@Override
+	public void deleteStudyingCourse(int studentId, int courseId) {
+		
+		Session session = factory.getCurrentSession();
+		
+		// use native sql to delete relationship
+		String theQuery = 
+				String.format(
+						"delete from course_student where student_id=%d and course_id=%d",
+						studentId, courseId);
+		
+		session.createSQLQuery(theQuery).executeUpdate();
+		
+	}
+
+	@Override
+	public List<Course> coursesByKeyword(String keyword) {
+		
+		Session session = factory.getCurrentSession();
+		
+		Query<Course> theQuery;
+		
+		if(keyword == null) {
+			theQuery = session.createQuery(
+					"from Course c", Course.class);
+		} else {
+		
+			theQuery = session.createQuery(
+				"from Course c where lower(name) like lower(:keyword)", 
+				Course.class);
+		
+			theQuery.setParameter("keyword", '%' + keyword + '%');
+		}
+		return theQuery.getResultList();
+	}
+
+	@Override
+	public void registerCourse(int studentId, int courseId) {
+		
+		Session session = factory.getCurrentSession();
+		
+		if(!isTeacherOfCourse(studentId, courseId)) {
+			// use native sql to delete relationship
+			String theQuery = 
+				String.format(
+						"insert into course_student set student_id=%d, course_id=%d",
+						studentId, courseId);
+			
+			session.createSQLQuery(theQuery).executeUpdate();
+		}
+	}
+	
+	private boolean isTeacherOfCourse(int instructorId, int courseId) {
+		
+		int instructorIdOfCourse = read(courseId).getInstructor().getId();
+		
+		return instructorId == instructorIdOfCourse;
+		
+	}
 }
