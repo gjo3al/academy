@@ -23,7 +23,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 public class RepositoryConfig {
 	
 	@Autowired
-	private Environment environment;
+	Environment environment;
 	
 	@Bean
     public LocalSessionFactoryBean sessionFactory() {
@@ -44,7 +44,7 @@ public class RepositoryConfig {
         return dataSource;
     }
 	
-	private Properties hibernateProperties() {
+	Properties hibernateProperties() {
         Properties properties = new Properties();
         properties.put("hibernate.dialect", environment.getRequiredProperty("hibernate.dialect"));
         properties.put("hibernate.show_sql", environment.getRequiredProperty("hibernate.show_sql"));

@@ -71,10 +71,6 @@
 			  	刪除</button>
 			  </form:form>
 			  </c:if>
-			  
-			  <c:if test="${!isSelf}">
-			  <a href="${pageContext.request.contextPath}/courses/${user.id}" class="btn btn-info">選修</a>
-			  </c:if>
 			</td>
 		  </tr>
 	    </c:forEach>

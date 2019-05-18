@@ -16,14 +16,15 @@
 </head>
 <body>
 <div class="container">
-  <h3>${keyword}的搜尋結果：共有 ${fn:length(courses)}筆結果</h3>
+
+  <h3>${keyword}  搜尋結果：共有 ${fn:length(courses)}筆結果</h3>
   <form:form action="${pageContext.request.contextPath}/courses/search" method="GET">
     <div style="margin-bottom: 25px"
 		class="input-group">
       <span class="input-group-addon">
 		<i class="glyphicon glyphicon-search"></i>
 	  </span>
-	  <input type="text" name="keyword"/>
+	  <input type="text" name="keyword" placeholder="課程關鍵字"/>
 	  <input type="submit" value="Search" class="btn btn-primary"/>
 	</div>
   </form:form>
@@ -46,40 +47,42 @@
 		  <td>${course.description}</td>
 		  <td>${course.instructor.userDetail.nickname}</td>
 		  <td>
-		  
 		  <c:choose>
 		    <c:when test="${user.id == course.instructor.id}">
-			<form:form action="${pageContext.request.contextPath}/courses/${user.id}/${course.id}/study"
-			  		   method="POST">
 			  <strong class="text-warning">自己的課程</strong>
-			</form:form>
 		    </c:when>
 		  
 		    <c:when test="${studyingCoursesId.contains(course.id)}">
-			<form:form action="${pageContext.request.contextPath}/courses/${user.id}/${course.id}/study"
+			<form:form action="${pageContext.request.contextPath}/courses/${user.id}/${course.id}/study/delete"
 			  		   method="POST">
+			  <input type="hidden" name="keyword" value="${keyword}"/>
 			  <strong class="text-warning">已選修此課程</strong>
+			  <button type="submit" 
+			  		    class="btn btn-warning"
+			  		    onclick="if(!(confirm('確定要退出課程?'))) return false">
+			  	退出
+			  </button>
 			</form:form>
 		    </c:when>
 		  
 		    <c:otherwise>
 			<form:form action="${pageContext.request.contextPath}/courses/${user.id}/${course.id}/study"
 			  		   method="POST">
+			  <input type="hidden" name="keyword" value="${keyword}"/>
 			  <button type="submit" class="btn btn-info">選修</button>
 			</form:form>
 		    </c:otherwise>
 		  
 		  </c:choose>
-		  
 		  </td>
 		</tr>
 	  </c:forEach>
 	</tbody>
-	
   </table>
   
   <hr>
   <a href="${pageContext.request.contextPath}" class="btn btn-success">首頁</a>
+  <a href="${pageContext.request.contextPath}/courses/${user.id}/study" class="btn btn-info">選修的課程</a>
 </div>
 </body>
 </html>

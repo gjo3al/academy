@@ -33,4 +33,21 @@
 		<nature>org.eclipse.jem.workbench.JavaEMFNature</nature>
 		<nature>org.eclipse.buildship.core.gradleprojectnature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>main-resources</name>
+			<type>2</type>
+			<location>C:/Users/鍏/Desktop/testProject/academy/academy-shared/src/main/resources</location>
+		</link>
+		<link>
+			<name>test-java</name>
+			<type>2</type>
+			<location>C:/Users/鍏/Desktop/testProject/academy/academy-shared/src/test/java</location>
+		</link>
+		<link>
+			<name>test-resources</name>
+			<type>2</type>
+			<location>C:/Users/鍏/Desktop/testProject/academy/academy-shared/src/test/resources</location>
+		</link>
+	</linkedResources>
 </projectDescription>

@@ -1,5 +1,6 @@
 plugins {
     id 'base'
+    id 'java'
 }
 
 subprojects {
@@ -12,8 +13,47 @@ subprojects {
 	sourceCompatibility = theSourceCompatibility
 	targetCompatibility = theSourceCompatibility
 	
+	// exclude source folders for test from compile time
+	// include academy-shared alternative for compile and test compile
+	if(project.name != 'academy-shared') {
+	sourceSets {
+		main {
+			java {
+				exclude 'src/test/java/**'
+			}
+			resources {
+				srcDir '../academy-shared/src/main/resources'
+				exclude 'src/test/resources/**'
+			}
+		}
+			
+		test {
+			java {
+				srcDir '../academy-shared/src/test/java'
+			}
+			resources {
+				srcDir '../academy-shared/src/test/resources'
+			}
+		}
+	}
+	}
+
 	repositories {
     	jcenter()
+	}
+}
+
+project(':academy-shared') {
+	// exclude source folders for test from compile time
+	sourceSets {
+		main {
+			java {
+				exclude 'src/test/java/**'
+			}
+			resources {
+				exclude 'src/test/resources/**'
+			}
+		}
 	}
 }
 
@@ -31,7 +71,6 @@ project(':academy-user-detail') {
         api project(':academy-user-detail-repository')
     }
 }
-
 
 project(':academy-user-repository') {
 

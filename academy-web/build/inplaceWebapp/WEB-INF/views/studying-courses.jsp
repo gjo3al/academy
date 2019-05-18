@@ -18,7 +18,7 @@
 <div class="container">
   <h3>${user.userDetail.nickname}選修的課程</h3>
   <hr>
-
+	
   <c:if test="${param.registerSuccess}">
 	<div class="alert alert-success col-xs-1">
 	    新增成功
@@ -37,7 +37,7 @@
       <span class="input-group-addon">
 		<i class="glyphicon glyphicon-search"></i>
 	  </span>
-	  <input type="text" name="keyword"/>
+	  <input type="text" name="keyword" placeholder="課程關鍵字" value="${param.keyword}"/>
 	  <input type="submit" value="Search" class="btn btn-primary"/>
 	</div>
   </form:form>
@@ -58,9 +58,11 @@
 	      <tr>
 			<td>${course.name}</td>
 			<td>${course.description}</td>
+			
 			<td>
 			  <form:form action="${pageContext.request.contextPath}/courses/${user.id}/${course.id}/study/delete"
 			  		   method="POST">
+			  	<input type="hidden" name="keyword" value="${keyword}"/>
 			  	<button type="submit" 
 			  		    class="btn btn-warning"
 			  		    onclick="if(!(confirm('確定要退出課程?'))) return false">

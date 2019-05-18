@@ -117,7 +117,6 @@ public class CourseRepositoryImpl implements CourseRepository {
 						studentId, courseId);
 		
 		session.createSQLQuery(theQuery).executeUpdate();
-		
 	}
 
 	@Override
@@ -147,13 +146,17 @@ public class CourseRepositoryImpl implements CourseRepository {
 		Session session = factory.getCurrentSession();
 		
 		if(!isTeacherOfCourse(studentId, courseId)) {
-			// use native sql to delete relationship
-			String theQuery = 
-				String.format(
-						"insert into course_student set student_id=%d, course_id=%d",
-						studentId, courseId);
 			
-			session.createSQLQuery(theQuery).executeUpdate();
+		// use native sql to delete relationship
+		@SuppressWarnings("rawtypes")
+		Query theQuery = session.createSQLQuery(
+					"insert into course_student set student_id=:studentId, course_id=:courseId");
+		
+		theQuery.setParameter("studentId", studentId);
+		theQuery.setParameter("courseId", courseId);
+		
+		theQuery.executeUpdate();
+		
 		}
 	}
 	

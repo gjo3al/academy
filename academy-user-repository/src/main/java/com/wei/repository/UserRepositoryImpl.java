@@ -42,7 +42,7 @@ public class UserRepositoryImpl implements UserRepository {
 		return domainObject;
 	}
 
-	@Override
+	/*@Override
 	public Users delete(String username) {
 		
 		Session session = factory.getCurrentSession();
@@ -52,10 +52,11 @@ public class UserRepositoryImpl implements UserRepository {
 		session.delete(deleted);
 
 		return deleted;
-	}
+	}*/
 
 	@Override
 	public Users findByUserName(String username) {
+		
 		Session session = factory.getCurrentSession();
 		
 		Users result = null;

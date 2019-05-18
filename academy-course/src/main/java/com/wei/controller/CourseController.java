@@ -86,6 +86,7 @@ public class CourseController {
 	
 	@PostMapping("/{studentId}/{courseId}/study")
 	public String registerCourse(
+			@RequestParam String keyword,
 			@PathVariable int studentId,
 			@PathVariable int courseId,
 			Model theModel) {
@@ -93,6 +94,8 @@ public class CourseController {
 		courseService.registerCourse(studentId, courseId);
 		
 		theModel.addAttribute("registerSuccess", true);
+		
+		theModel.addAttribute("keyword", keyword);
 		
 		return String.format(SHOW_STUDYING_COURSE, studentId);
 	}
@@ -184,12 +187,15 @@ public class CourseController {
 	
 	@PostMapping("/{studentId}/{courseId}/study/delete")
 	public String deleteStudyingCourse(
+			@RequestParam String keyword,
 			@PathVariable int studentId, 
 			@PathVariable int courseId,
 			Model theModel) {
 			
 		theModel.addAttribute("deleteSuccess", true);
-			
+		
+		theModel.addAttribute("keyword", keyword);
+		
 		courseService.deleteStudyingCourse(studentId, courseId);
 		
 		return String.format(SHOW_STUDYING_COURSE, studentId);
