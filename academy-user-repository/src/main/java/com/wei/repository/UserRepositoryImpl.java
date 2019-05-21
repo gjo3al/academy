@@ -42,18 +42,6 @@ public class UserRepositoryImpl implements UserRepository {
 		return domainObject;
 	}
 
-	/*@Override
-	public Users delete(String username) {
-		
-		Session session = factory.getCurrentSession();
-
-		Users deleted = session.get(Users.class, username);
-
-		session.delete(deleted);
-
-		return deleted;
-	}*/
-
 	@Override
 	public Users findByUserName(String username) {
 		

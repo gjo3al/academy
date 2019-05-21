@@ -9,5 +9,5 @@ import org.springframework.context.annotation.PropertySource;
 @Configuration
 @Import(RepositoryConfig.class)
 @PropertySource("classpath:application_test.properties")
-public class RepositoryConfigTest {
+public class RepositoryTestConfig {
 }

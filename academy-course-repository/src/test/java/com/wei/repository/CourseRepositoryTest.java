@@ -4,13 +4,13 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.query.Query;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,40 +20,41 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.wei.config.RepositoryConfigTest;
+import com.wei.config.RepositoryTestConfig;
 import com.wei.entity.Course;
 import com.wei.entity.Users;
 
 // default Transaction attribute is PROPAGATION_REQUIRED
 // (support current transaction, if no transaction, create one)
 // run academy_test.sql every time before test
+// use jpa when test(in order to support other Object Relational Mapping implement)
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = { RepositoryConfigTest.class})
+@ContextConfiguration(classes = { RepositoryTestConfig.class})
 @Transactional
 @Sql("classpath:academy_test.sql")
 public class CourseRepositoryTest {
 
-	@Autowired
-	private SessionFactory factory;
+	@PersistenceContext
+	private EntityManager entityManager;
 	
 	@Autowired
 	private CourseRepository courseRepository;
 	
-	private final String USERNAME_FOR_TEST_TEACHER = "userForTestTeacher";
+	private final static String USERNAME_FOR_TEST_TEACHER = "userForTestTeacher";
 	
-	private final String USERNAME_FOR_TEST_STUDENT = "userForTestStudent";
+	private final static String USERNAME_FOR_TEST_STUDENT = "userForTestStudent";
 	
-	private final String COURSENAME_FOR_TEST_1 = "courseForTest1";
+	private final static String COURSE_NAME_FOR_TEST_1 = "courseForTest1";
 	
-	private final String COURSENAME_FOR_TEST_2 = "courseForTest2";
+	private final static String COURSE_NAME_FOR_TEST_2 = "courseForTest2";
 	
-	private final String COURSEDESCRIPTION_FOR_TEST = "description";
+	private final static String COURSE_DESCRIPTION_FOR_TEST = "description";
 	
-	private final String EXIST_KEYWORD_FOR_TEST = "ForTest";
+	private final static String KEYWORD_FOR_TEST = "ForTest";
 	
-	private final String NOT_EXIST_KEYWORD_FOR_TEST = "dummy";
+	private final static String KEYWORD_NOT_EXIST = "dummy";
 	
-	private final int NOT_EXIST_ID = 0;
+	private final static int ID_NOT_EXIST = 0;
 	
 	private Users instructor;
 	
@@ -66,15 +67,15 @@ public class CourseRepositoryTest {
 	}
 
 	@Before
-	public void setUpInitData() {
-		createInitalUserWithCourse();
+	public void before() {
+		createInitalUsersAndCourses();
 	}
 	
 	// duplicate course issue is dealt with in service layer
 	@Test
 	public void create_new_course_success() {
 			
-		Course newCourse = createNewCourseWithNameAndInstructor(COURSENAME_FOR_TEST_2, instructor);
+		Course newCourse = createNewCourseWithNameAndInstructor(COURSE_NAME_FOR_TEST_2, instructor);
 		
 		courseRepository.create(newCourse);
 		
@@ -94,44 +95,40 @@ public class CourseRepositoryTest {
 	}
 	
 	@Test
-	public void read_course_notExist() {
+	public void read_course_not_exist() {
 		
-		Course course = courseRepository.read(NOT_EXIST_ID);
+		Course course = courseRepository.read(ID_NOT_EXIST);
 		
 		assertThat(course, nullValue());
 	}
 	
 	@Test
-	public void update_course() {
-		
-		Session session = factory.getCurrentSession(); 
+	public void update_course_success() {
 		
 		int id = courses.get(0).getId();
 		
-		Course course = courseRepository.read(id);
+		Course course = entityManager.find(Course.class, id);
 		
-		course.setName(COURSENAME_FOR_TEST_2);
+		course.setName(COURSE_NAME_FOR_TEST_2);
 		
-		course.setDescription(COURSEDESCRIPTION_FOR_TEST);
+		course.setDescription(COURSE_DESCRIPTION_FOR_TEST);
 		
 		courseRepository.update(course);
 		
-		Course courseAfterUpdate = session.get(Course.class, id);
+		Course courseAfterUpdate = entityManager.find(Course.class, id);
 		
-		assertThat(courseAfterUpdate.getName(), is(COURSENAME_FOR_TEST_2));
-		assertThat(courseAfterUpdate.getDescription(), is(COURSEDESCRIPTION_FOR_TEST));
+		assertThat(courseAfterUpdate.getName(), is(COURSE_NAME_FOR_TEST_2));
+		assertThat(courseAfterUpdate.getDescription(), is(COURSE_DESCRIPTION_FOR_TEST));
 	}
 	
 	@Test
 	public void delete_course_exist() {
 		
-		Session session = factory.getCurrentSession(); 
-		
 		int id = courses.get(0).getId();
 		
 		courseRepository.delete(id);
 		
-		Course courseAfterDelete = session.get(Course.class, id);
+		Course courseAfterDelete = entityManager.find(Course.class, id);
 		
 		assertThat(courseAfterDelete, nullValue());
 	}
@@ -139,7 +136,7 @@ public class CourseRepositoryTest {
 	@Test(expected=IllegalArgumentException.class)
 	public void delete_course_notExist() {
 		
-		courseRepository.delete(NOT_EXIST_ID);
+		courseRepository.delete(ID_NOT_EXIST);
 	}
 	
 	@Test
@@ -152,10 +149,10 @@ public class CourseRepositoryTest {
 	}
 	
 	@Test
-	public void coursesByInstructorId_notExist() {
+	public void coursesByInstructorId_not_exist() {
 		
 		List<Course> actualCourses = 
-				courseRepository.coursesByInstructorId(NOT_EXIST_ID);
+				courseRepository.coursesByInstructorId(ID_NOT_EXIST);
 		
 		assertThat(actualCourses.size(), is(0));
 	}
@@ -173,7 +170,7 @@ public class CourseRepositoryTest {
 	public void coursesByStudentId_notExist() {
 		
 		List<Course> actualCourses = 
-				courseRepository.coursesByStudentId(NOT_EXIST_ID);
+				courseRepository.coursesByStudentId(ID_NOT_EXIST);
 		
 		assertThat(actualCourses.size(), is(0));
 	}
@@ -183,17 +180,17 @@ public class CourseRepositoryTest {
 		
 		Course course = 
 				courseRepository.courseByInstructorIdAndName(
-						instructor.getId(), COURSENAME_FOR_TEST_1);
+						instructor.getId(), COURSE_NAME_FOR_TEST_1);
 		
 		assertThat(course, is(courses.get(0)));
 	}
 	
 	@Test
-	public void courseByInstructorIdAndName_notExist() {
+	public void courseByInstructorIdAndName_not_exist() {
 		
 		Course course = 
 				courseRepository.courseByInstructorIdAndName(
-						instructor.getId(), COURSENAME_FOR_TEST_2);
+						instructor.getId(), COURSE_NAME_FOR_TEST_2);
 		
 		assertThat(course, nullValue());
 	}
@@ -201,46 +198,42 @@ public class CourseRepositoryTest {
 	@Test
 	public void deleteStudyingCourse_exist() {
 		
-		int studentId = student.getId();
+		courseRepository.deleteStudyingCourse(
+				student.getId(), courses.get(0).getId());
 		
-		int courseId = courses.get(0).getId();
-		
-		courseRepository.deleteStudyingCourse(studentId, courseId);
+		assertThat(getOfferedOrStudyingCourses(false).size(), is(0));
 	}
 	
 	@Test
-	public void deleteStudyingCourse_notExist() {
+	public void deleteStudyingCourse_not_exist() {
 		
-		courseRepository.deleteStudyingCourse(NOT_EXIST_ID, NOT_EXIST_ID);
+		courseRepository.deleteStudyingCourse(
+				student.getId(), ID_NOT_EXIST);
+		
+		assertThat(getOfferedOrStudyingCourses(false).size(), is(1));
 	}
 	
 	@Test
 	public void coursesByKeyword_exist() {
 		
-		List<Course> coursesByKeyword = 
-				courseRepository.coursesByKeyword(EXIST_KEYWORD_FOR_TEST);
-		
-		assertThat(coursesByKeyword, is(courses));
+		assertThat(courseRepository.coursesByKeyword(KEYWORD_FOR_TEST), 
+				is(courses));
 	}
 	
 	@Test
-	public void coursesByKeyword_notExist() {
+	public void coursesByKeyword_not_exist() {
 		
-		List<Course> coursesByKeyword = 
-				courseRepository.coursesByKeyword(NOT_EXIST_KEYWORD_FOR_TEST);
-		
-		assertThat(coursesByKeyword.size(), is(0));
+		assertThat(courseRepository.coursesByKeyword(KEYWORD_NOT_EXIST).size(), 
+				is(0));
 	}
 	
 	@Test
 	public void coursesByKeyword_null_keyword_return_all() {
-		
-		Session session = factory.getCurrentSession();
-		
+
 		Course newCourse = 
-				createNewCourseWithNameAndInstructor(COURSENAME_FOR_TEST_2, instructor);
+				createNewCourseWithNameAndInstructor(COURSE_NAME_FOR_TEST_2, instructor);
 		
-		session.save(newCourse);
+		entityManager.persist(newCourse);
 		
 		List<Course> coursesByKeyword = 
 				courseRepository.coursesByKeyword(null);
@@ -251,12 +244,10 @@ public class CourseRepositoryTest {
 	@Test
 	public void registerCourse_success() {
 		
-		Session session = factory.getCurrentSession();
-		
 		Course newCourse = 
-				createNewCourseWithNameAndInstructor(COURSENAME_FOR_TEST_2, instructor);
+				createNewCourseWithNameAndInstructor(COURSE_NAME_FOR_TEST_2, instructor);
 		
-		session.save(newCourse);
+		entityManager.persist(newCourse);
 		
 		courseRepository.registerCourse(student.getId(), newCourse.getId());
 		
@@ -265,9 +256,7 @@ public class CourseRepositoryTest {
 		assertThat(getOfferedOrStudyingCourses(false), is(courses));
 	}
 	
-	private void createInitalUserWithCourse() {
-		
-		Session session = factory.getCurrentSession();
+	private void createInitalUsersAndCourses() {
 		
 		instructor = new Users();
 		
@@ -275,7 +264,7 @@ public class CourseRepositoryTest {
 		
 		instructor.setPassword(USERNAME_FOR_TEST_TEACHER);
 		
-		session.save(instructor);
+		entityManager.persist(instructor);
 		
 		student = new Users();
 		
@@ -283,11 +272,11 @@ public class CourseRepositoryTest {
 		
 		student.setPassword(USERNAME_FOR_TEST_STUDENT);
 		
-		session.save(student);
+		entityManager.persist(student);
 		
-		Course course = createNewCourseWithNameAndInstructor(COURSENAME_FOR_TEST_1, instructor);
+		Course course = createNewCourseWithNameAndInstructor(COURSE_NAME_FOR_TEST_1, instructor);
 		
-		session.save(course);
+		entityManager.persist(course);
 		
 		courses.clear();
 		
@@ -298,7 +287,7 @@ public class CourseRepositoryTest {
 						"insert into course_student set student_id=%d, course_id=%d",
 						student.getId(), course.getId());
 			
-		session.createSQLQuery(theQuery).executeUpdate();
+		entityManager.createNativeQuery(theQuery).executeUpdate();
 	}
 	
 	private Course createNewCourseWithNameAndInstructor(String courseName, Users instructor) {
@@ -314,17 +303,15 @@ public class CourseRepositoryTest {
 	
 	private List<Course> getOfferedOrStudyingCourses(boolean forInstructor) {
 		
-		Session session = factory.getCurrentSession();
-		
-		Query<Course> theQuery;
+		TypedQuery<Course> theQuery;
 		
 		if(forInstructor) {
-			theQuery = session.createQuery(
+			theQuery = entityManager.createQuery(
 					"from Course where instructor.id=:id", 
 					Course.class);
 			theQuery.setParameter("id", instructor.getId());
 		} else {
-			theQuery = session.createQuery(
+			theQuery = entityManager.createQuery(
 					"select c from Course c join c.students s where s.id=:id", 
 					Course.class);
 			theQuery.setParameter("id", student.getId());

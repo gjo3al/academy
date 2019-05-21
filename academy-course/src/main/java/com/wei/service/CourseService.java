@@ -55,8 +55,7 @@ public class CourseService {
 		Course persistedCourse = 
 				courseRepository.courseByInstructorIdAndName(instructorId, course.getName());
 		
-		return persistedCourse != null &&
-				persistedCourse.getId() != course.getId();
+		return persistedCourse != null;
 	}
 
 	public void registerCourse(int studentId, int courseId) {

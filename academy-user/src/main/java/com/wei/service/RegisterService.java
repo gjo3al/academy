@@ -3,11 +3,11 @@ package com.wei.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.wei.email.EmailService;
+import com.wei.email.SecurityCodeGenerator;
 import com.wei.entity.Authorities;
 import com.wei.entity.RegistrationUser;
 import com.wei.entity.UserDetail;
@@ -26,7 +26,7 @@ public class RegisterService {
 	private AuthoritiesRepositoryImpl authoritiesRepository;
 
 	@Autowired
-	private BCryptPasswordEncoder passwordEncoder;
+	private SecurityCodeGenerator generator;
 	
 	@Autowired
 	private EmailService emailService;
@@ -39,7 +39,7 @@ public class RegisterService {
 
 		Users theUser = registerUser(registerData); 
 		
-		String email = registerData.getEmail();
+		String email = theUser.getUserDetail().getEmail();
 		
 		List<String> registerAuthorites = registerData.getAuthorities();
 		
@@ -52,7 +52,7 @@ public class RegisterService {
 			authoritiesRepository.create(auth);
 		});
 		
-		emailService.validationLink(email, generateToken(theUser));
+		emailService.validationLink(email, generator.generateToken(theUser));
 	}
 	
 	private Users registerUser(RegistrationUser registerData) {
@@ -63,16 +63,10 @@ public class RegisterService {
 		
 		detail.setUser(theUser);
 		
-		theUser.setPassword(passwordEncoder.encode(theUser.getPassword()));
+		theUser.setPassword(generator.encode(theUser.getPassword()));
 		
 		theUser.setEnabled(false);
 		
 		return userRepository.create(theUser);
-
 	}
-	
-	private String generateToken(Users theUser) {
-		return theUser.getPassword();
-	}
-	
 }

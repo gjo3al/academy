@@ -44,6 +44,15 @@
 		  <form:hidden path="userDetail.nickname"/>
 		  <form:hidden path="userDetail.email"/>
 		  
+		  <!-- offer studying courses data to JSP -->
+		  <!-- for fear that delete studying courses after reset password -->
+		  <c:forEach varStatus="status" var="course" items="${user.courses}">
+		  
+		  <form:hidden path="courses[${status.index}].id"/>
+		  <form:hidden path="courses[${status.index}].name"/>
+		  
+		  </c:forEach>
+		  
 		  <div style="margin-bottom: 25px" class="input-group">
 	  		<span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span> 	
 	  		  <input type="password" name="newPassword" placeholder="新密碼" class="form-control">				

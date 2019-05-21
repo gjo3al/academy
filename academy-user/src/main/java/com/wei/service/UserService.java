@@ -1,11 +1,11 @@
 package com.wei.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.wei.email.EmailService;
+import com.wei.email.SecurityCodeGenerator;
 import com.wei.entity.Users;
 import com.wei.repository.UserDetailRepository;
 import com.wei.repository.UserRepository;
@@ -24,7 +24,7 @@ public class UserService {
 	private EmailService emailService;
 	
 	@Autowired
-	private BCryptPasswordEncoder passwordEncoder;
+	private SecurityCodeGenerator generator;
 	
 	public Users read(int id) {
 		
@@ -38,10 +38,6 @@ public class UserService {
 
 	public Users update(Users domainObject) {
 		return userRepository.update(domainObject);
-	}
-
-	public Users delete(String username) {
-		return userRepository.delete(username);
 	}
 
 	public Users findByUserName(String username) {
@@ -58,11 +54,11 @@ public class UserService {
 		
 		String email = userDetailRepository.read(theUser.getId()).getEmail();
 		
-		String newPassword = generatePassword(theUser);
+		String newPassword = generator.generateTempPassword(theUser);
 		
-		theUser.setPassword(passwordEncoder.encode(newPassword));
+		theUser.setPassword(generator.encode(newPassword));
 		
-		String token = generateToken(theUser);
+		String token = generator.generateToken(theUser);
 		
 		userRepository.update(theUser);
 		
@@ -76,9 +72,15 @@ public class UserService {
 		if(theUser == null)
 			return null;
 		
-		String checkedToken = generateToken(theUser);
+		String checkedToken = generator.generateToken(theUser);
 		
-		return checkedToken.equals(token)? theUser:null;
+		if(checkedToken.equals(token)) {
+			// fetch courses in order to offer studying courses data to JSP
+			// for fear that delete studying courses after reset password
+			theUser.getCourses();
+			return theUser;
+		} else
+			return null;
 	}
 	
 	public boolean isUsernameAndEmailMatched(String username, String email) {
@@ -100,17 +102,8 @@ public class UserService {
 	
 	public void resetPassword(Users theUser, String newPassword) {
 		
-		theUser.setPassword(passwordEncoder.encode(newPassword));
+		theUser.setPassword(generator.encode(newPassword));
 		
 		userRepository.update(theUser);
 	}
-	
-	private String generateToken(Users theUser) {
-		return theUser.getPassword();
-	}
-	
-	private String generatePassword(Users theUser) {
-		return passwordEncoder.encode(theUser.toString());
-	}
-
 }

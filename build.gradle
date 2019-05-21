@@ -41,6 +41,15 @@ subprojects {
 	repositories {
     	jcenter()
 	}
+	
+	dependencies {
+		testImplementation 'org.springframework:spring-test:5.1.7.RELEASE'
+		testImplementation 'org.hamcrest:hamcrest-library:2.1'
+	    testImplementation 'junit:junit:4.12'
+	    testImplementation 'org.mockito:mockito-core:2.24.0'
+	    
+	    testImplementation 'org.springframework:spring-tx:5.1.7.RELEASE'
+	}
 }
 
 project(':academy-shared') {

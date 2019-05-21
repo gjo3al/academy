@@ -1,4 +1,4 @@
-package com.wei.service;
+package com.wei.email;
 
 import java.io.IOException;
 import java.util.Date;
@@ -19,11 +19,9 @@ import javax.mail.internet.MimeMultipart;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-import com.wei.email.EmailService;
-
-@Service
+@Component
 @PropertySource("classpath:application.properties")
 public class GmailService implements EmailService {
 
