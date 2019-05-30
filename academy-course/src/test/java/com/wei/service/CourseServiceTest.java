@@ -38,14 +38,14 @@ public class CourseServiceTest {
 	
 	private final static String ROLE_TEACHER = "ROLE_TEACHER";
 	
-	private final static String COURSE_NAME_FOR_TEST = "courseForTest1";
+	private final static String COURSE_NAME = "courseForTest";
 	
 	private final static int ID_OF_COURSE = 1;
 	
-	private final static String KEYWORD_FOR_TEST = "ForTest";
+	private final static String KEYWORD = "keyword";
 	
 	@Test
-	public void coursesByInstructorId_normal() {
+	public void coursesByInstructorId_success() {
 		
 		List<Course> courses = new ArrayList<>();
 		
@@ -71,20 +71,20 @@ public class CourseServiceTest {
 	}
 	
 	@Test
-	public void coursesByKeyword_normal() {
+	public void coursesByKeyword_success() {
 		
 		List<Course> courses = new ArrayList<>();
 		
 		courses.add(new Course());
 		
-		given(courseRepository.coursesByKeyword(KEYWORD_FOR_TEST)).willReturn(courses);
+		given(courseRepository.coursesByKeyword(KEYWORD)).willReturn(courses);
 		
-		assertThat(courseService.coursesByKeyword(KEYWORD_FOR_TEST), 
+		assertThat(courseService.coursesByKeyword(KEYWORD), 
 				is(courses));
 	}
 	
 	@Test
-	public void saveOrUpdate_normal() {
+	public void saveOrUpdate_success() {
 		
 		Course course = new Course();
 		
@@ -94,7 +94,7 @@ public class CourseServiceTest {
 	}
 	
 	@Test
-	public void read_normal() {
+	public void read_success() {
 		
 		Course course = new Course();
 		
@@ -104,7 +104,7 @@ public class CourseServiceTest {
 	}
 	
 	@Test
-	public void delete_normal() {
+	public void delete_success() {
 		
 		Course course = new Course();
 		
@@ -115,7 +115,7 @@ public class CourseServiceTest {
 	}
 	
 	@Test
-	public void isTeacher_normal() {
+	public void isTeacher_success() {
 		
 		given(authoritiesRepository.hasAuthority(ID_OF_TEACHER, ROLE_TEACHER))
 		.willReturn(true);
@@ -128,36 +128,36 @@ public class CourseServiceTest {
 		
 		Course course = new Course();
 
-		course.setName(COURSE_NAME_FOR_TEST);
+		course.setName(COURSE_NAME);
 		
-		given(courseRepository.courseByInstructorIdAndName(ID_OF_TEACHER, COURSE_NAME_FOR_TEST)).
+		given(courseRepository.courseByInstructorIdAndName(ID_OF_TEACHER, COURSE_NAME)).
 		willReturn(course);
 		
 		assertTrue(courseService.hasDuplicateCourse(ID_OF_TEACHER, course));	
 	}
 	
 	@Test
-	public void hasDuplicateCourse_not_duplicate() {
+	public void hasDuplicateCourse_notDuplicate() {
 		
 		Course course = new Course();
 
-		course.setName(COURSE_NAME_FOR_TEST);
+		course.setName(COURSE_NAME);
 		
-		given(courseRepository.courseByInstructorIdAndName(ID_OF_TEACHER, COURSE_NAME_FOR_TEST)).
+		given(courseRepository.courseByInstructorIdAndName(ID_OF_TEACHER, COURSE_NAME)).
 		willReturn(null);
 		
 		assertFalse(courseService.hasDuplicateCourse(ID_OF_TEACHER, course));	
 	}
 	
 	@Test
-	public void registerCourse_normal() {
+	public void registerCourse_success() {
 		courseService.registerCourse(ID_OF_STUDENT, ID_OF_COURSE);
 		
 		then(courseRepository).should().registerCourse(ID_OF_STUDENT, ID_OF_COURSE);
 	}
 	
 	@Test
-	public void deleteStudyingCourse_normal() {
+	public void deleteStudyingCourse_success() {
 		courseService.deleteStudyingCourse(ID_OF_STUDENT, ID_OF_COURSE);
 		
 		then(courseRepository).should().deleteStudyingCourse(ID_OF_STUDENT, ID_OF_COURSE);

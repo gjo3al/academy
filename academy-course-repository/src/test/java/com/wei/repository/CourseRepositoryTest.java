@@ -44,13 +44,13 @@ public class CourseRepositoryTest {
 	
 	private final static String USERNAME_FOR_TEST_STUDENT = "userForTestStudent";
 	
-	private final static String COURSE_NAME_FOR_TEST_1 = "courseForTest1";
+	private final static String COURSE_NAME_1 = "courseForTest1";
 	
-	private final static String COURSE_NAME_FOR_TEST_2 = "courseForTest2";
+	private final static String COURSE_NAME_2 = "courseForTest2";
 	
-	private final static String COURSE_DESCRIPTION_FOR_TEST = "description";
+	private final static String COURSE_DESCRIPTION = "description";
 	
-	private final static String KEYWORD_FOR_TEST = "ForTest";
+	private final static String KEYWORD = "ForTest";
 	
 	private final static String KEYWORD_NOT_EXIST = "dummy";
 	
@@ -73,9 +73,9 @@ public class CourseRepositoryTest {
 	
 	// duplicate course issue is dealt with in service layer
 	@Test
-	public void create_new_course_success() {
+	public void create_success() {
 			
-		Course newCourse = createNewCourseWithNameAndInstructor(COURSE_NAME_FOR_TEST_2, instructor);
+		Course newCourse = createNewCourseWithNameAndInstructor(COURSE_NAME_2, instructor);
 		
 		courseRepository.create(newCourse);
 		
@@ -85,7 +85,7 @@ public class CourseRepositoryTest {
 	}
 	
 	@Test
-	public void read_course_exist() {
+	public void read_exist() {
 		
 		Course comparedCourse = courses.get(0);
 		
@@ -95,7 +95,7 @@ public class CourseRepositoryTest {
 	}
 	
 	@Test
-	public void read_course_not_exist() {
+	public void read_notExist() {
 		
 		Course course = courseRepository.read(ID_NOT_EXIST);
 		
@@ -103,26 +103,26 @@ public class CourseRepositoryTest {
 	}
 	
 	@Test
-	public void update_course_success() {
+	public void update_success() {
 		
 		int id = courses.get(0).getId();
 		
 		Course course = entityManager.find(Course.class, id);
 		
-		course.setName(COURSE_NAME_FOR_TEST_2);
+		course.setName(COURSE_NAME_2);
 		
-		course.setDescription(COURSE_DESCRIPTION_FOR_TEST);
+		course.setDescription(COURSE_DESCRIPTION);
 		
 		courseRepository.update(course);
 		
 		Course courseAfterUpdate = entityManager.find(Course.class, id);
 		
-		assertThat(courseAfterUpdate.getName(), is(COURSE_NAME_FOR_TEST_2));
-		assertThat(courseAfterUpdate.getDescription(), is(COURSE_DESCRIPTION_FOR_TEST));
+		assertThat(courseAfterUpdate.getName(), is(COURSE_NAME_2));
+		assertThat(courseAfterUpdate.getDescription(), is(COURSE_DESCRIPTION));
 	}
 	
 	@Test
-	public void delete_course_exist() {
+	public void delete_exist() {
 		
 		int id = courses.get(0).getId();
 		
@@ -134,7 +134,7 @@ public class CourseRepositoryTest {
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
-	public void delete_course_notExist() {
+	public void deleteCourse_notExist() {
 		
 		courseRepository.delete(ID_NOT_EXIST);
 	}
@@ -149,7 +149,7 @@ public class CourseRepositoryTest {
 	}
 	
 	@Test
-	public void coursesByInstructorId_not_exist() {
+	public void coursesByInstructorId_noExist() {
 		
 		List<Course> actualCourses = 
 				courseRepository.coursesByInstructorId(ID_NOT_EXIST);
@@ -180,17 +180,17 @@ public class CourseRepositoryTest {
 		
 		Course course = 
 				courseRepository.courseByInstructorIdAndName(
-						instructor.getId(), COURSE_NAME_FOR_TEST_1);
+						instructor.getId(), COURSE_NAME_1);
 		
 		assertThat(course, is(courses.get(0)));
 	}
 	
 	@Test
-	public void courseByInstructorIdAndName_not_exist() {
+	public void courseByInstructorIdAndName_notExist() {
 		
 		Course course = 
 				courseRepository.courseByInstructorIdAndName(
-						instructor.getId(), COURSE_NAME_FOR_TEST_2);
+						instructor.getId(), COURSE_NAME_2);
 		
 		assertThat(course, nullValue());
 	}
@@ -205,7 +205,7 @@ public class CourseRepositoryTest {
 	}
 	
 	@Test
-	public void deleteStudyingCourse_not_exist() {
+	public void deleteStudyingCourse_notExist() {
 		
 		courseRepository.deleteStudyingCourse(
 				student.getId(), ID_NOT_EXIST);
@@ -216,22 +216,22 @@ public class CourseRepositoryTest {
 	@Test
 	public void coursesByKeyword_exist() {
 		
-		assertThat(courseRepository.coursesByKeyword(KEYWORD_FOR_TEST), 
+		assertThat(courseRepository.coursesByKeyword(KEYWORD), 
 				is(courses));
 	}
 	
 	@Test
-	public void coursesByKeyword_not_exist() {
+	public void coursesByKeyword_notExist() {
 		
 		assertThat(courseRepository.coursesByKeyword(KEYWORD_NOT_EXIST).size(), 
 				is(0));
 	}
 	
 	@Test
-	public void coursesByKeyword_null_keyword_return_all() {
+	public void coursesByKeyword_nullKeyword_return_all() {
 
 		Course newCourse = 
-				createNewCourseWithNameAndInstructor(COURSE_NAME_FOR_TEST_2, instructor);
+				createNewCourseWithNameAndInstructor(COURSE_NAME_2, instructor);
 		
 		entityManager.persist(newCourse);
 		
@@ -245,7 +245,7 @@ public class CourseRepositoryTest {
 	public void registerCourse_success() {
 		
 		Course newCourse = 
-				createNewCourseWithNameAndInstructor(COURSE_NAME_FOR_TEST_2, instructor);
+				createNewCourseWithNameAndInstructor(COURSE_NAME_2, instructor);
 		
 		entityManager.persist(newCourse);
 		
@@ -274,7 +274,7 @@ public class CourseRepositoryTest {
 		
 		entityManager.persist(student);
 		
-		Course course = createNewCourseWithNameAndInstructor(COURSE_NAME_FOR_TEST_1, instructor);
+		Course course = createNewCourseWithNameAndInstructor(COURSE_NAME_1, instructor);
 		
 		entityManager.persist(course);
 		

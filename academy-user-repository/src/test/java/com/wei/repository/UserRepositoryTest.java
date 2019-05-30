@@ -38,58 +38,58 @@ public class UserRepositoryTest {
 	@Autowired
 	private UserRepository userRepository;
 	
-	private final static String USERNAME_FOR_TEST_1 = "userForTest1";
+	private final static String USERNAME_1 = "userForTest1";
 	
-	private final static String USER_EMAIL_FOR_TEST = "userForTest@gmail.com";
+	private final static String USER_EMAIL = "userForTest@gmail.com";
 	
-	private final static String USER_PASSWORD_FOR_TEST = "password";
+	private final static String USER_PASSWORD = "password";
 	
-	private final static String NEW_PASSWORD_FOR_TEST = "newPassword";
+	private final static String NEW_PASSWORD = "newPassword";
 	
-	private final static String USERNAME_FOR_TEST_2 = "userForTest2";
+	private final static String USERNAME_2 = "userForTest2";
 	
 	private final static String DUMMY = "dummy";
 	
-	private final static int USER_ID_NOT_EXIST = 0;
+	private final static int ID_NOT_EXIST = 0;
 	
 	@Test
-	public void create_user_success() {
+	public void create_success() {
 		
 		Users user = new Users();
 		
-		user.setUsername(USERNAME_FOR_TEST_1);
+		user.setUsername(USERNAME_1);
 		
-		user.setPassword(USER_PASSWORD_FOR_TEST);
+		user.setPassword(USER_PASSWORD);
 		
 		userRepository.create(user);
 		
-		user = readByUsername(USERNAME_FOR_TEST_1);
+		user = readByUsername(USERNAME_1);
 		
 		assertThat(user, notNullValue());
-		assertThat(user.getUsername(), is(USERNAME_FOR_TEST_1));
-		assertThat(user.getPassword(), is(USER_PASSWORD_FOR_TEST));
+		assertThat(user.getUsername(), is(USERNAME_1));
+		assertThat(user.getPassword(), is(USER_PASSWORD));
 	}
 	
 	@Test(expected=ConstraintViolationException.class)
-	public void create_user_fail_duplicate_username() {
+	public void create_duplicateUsernameFail() {
 		
 		createInitalUser();
 		
-		Users otherUser = new Users(USERNAME_FOR_TEST_1); 
+		Users otherUser = new Users(USERNAME_1); 
 		
 		userRepository.create(otherUser);
 	}
 	
 	@Test(expected=ConstraintViolationException.class)
-	public void create_user_fail_duplicate_email() {
+	public void create_duplicateEmailFail() {
 		
 		createInitalUser();
 		
-		Users otherUser = new Users(USERNAME_FOR_TEST_2);
+		Users otherUser = new Users(USERNAME_2);
 		
 		UserDetail detail = new UserDetail();
 		
-		detail.setEmail(USER_EMAIL_FOR_TEST);
+		detail.setEmail(USER_EMAIL);
 		
 		detail.setUser(otherUser);
 		
@@ -97,7 +97,7 @@ public class UserRepositoryTest {
 	}
 	
 	@Test
-	public void read_user_exist() {
+	public void read_exist() {
 		
 		Users user = createInitalUser();
 		
@@ -107,25 +107,25 @@ public class UserRepositoryTest {
 	}
 	
 	@Test
-	public void read_user_not_exist() {
+	public void read_notExist() {
 		
-		Users user = userRepository.read(USER_ID_NOT_EXIST);
+		Users user = userRepository.read(ID_NOT_EXIST);
 		
 		assertThat(user, nullValue());
 	}
 
 	@Test
-	public void update_user_success() {
+	public void update_success() {
 		
 		Users user = createInitalUser();
 		
-		user.setPassword(NEW_PASSWORD_FOR_TEST);
+		user.setPassword(NEW_PASSWORD);
 		
 		userRepository.update(user);
 		
 		Users userAfterUpdate = entityManager.find(Users.class, user.getId());
 		
-		assertThat(userAfterUpdate.getPassword(), is(NEW_PASSWORD_FOR_TEST));
+		assertThat(userAfterUpdate.getPassword(), is(NEW_PASSWORD));
 	}
 	
 	@Test
@@ -133,7 +133,7 @@ public class UserRepositoryTest {
 		
 		createInitalUser();
 		
-		Users user = userRepository.findByUserName(USERNAME_FOR_TEST_1);
+		Users user = userRepository.findByUserName(USERNAME_1);
 		
 		assertThat(user, notNullValue());
 	}
@@ -151,13 +151,13 @@ public class UserRepositoryTest {
 
 		createInitalUser();
 		
-		Users user = userRepository.findByEmail(USER_EMAIL_FOR_TEST);
+		Users user = userRepository.findByEmail(USER_EMAIL);
 		
 		assertThat(user, notNullValue());
 	}
 	
 	@Test
-	public void findByEmail_not_exist() {
+	public void findByEmail_notExist() {
 		
 		Users user = userRepository.findByEmail(DUMMY);
 		
@@ -184,15 +184,15 @@ public class UserRepositoryTest {
 		
 		Users user = new Users();
 		
-		user.setUsername(USERNAME_FOR_TEST_1);
+		user.setUsername(USERNAME_1);
 		
-		user.setPassword(USER_PASSWORD_FOR_TEST);
+		user.setPassword(USER_PASSWORD);
 		
 		UserDetail detail = new UserDetail();
 		
-		detail.setEmail(USER_EMAIL_FOR_TEST);
+		detail.setEmail(USER_EMAIL);
 		
-		detail.setNickname(USERNAME_FOR_TEST_1);
+		detail.setNickname(USERNAME_1);
 		
 		detail.setUser(user);
 		

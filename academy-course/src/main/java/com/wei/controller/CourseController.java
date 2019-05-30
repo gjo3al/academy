@@ -39,7 +39,7 @@ public class CourseController {
 	
 	@Autowired
 	private UserService userService;
-	
+
 	@GetMapping("/{instructorId}/offer")
 	public String offeredCourses(
 			@PathVariable int instructorId, 
@@ -95,6 +95,7 @@ public class CourseController {
 		
 		theModel.addAttribute("registerSuccess", true);
 		
+		// users can search again without type in keyword
 		theModel.addAttribute("keyword", keyword);
 		
 		return String.format(SHOW_STUDYING_COURSE, studentId);
@@ -131,16 +132,16 @@ public class CourseController {
 			return "create-course-form";
 		}
 			
-		if(courseService.hasDuplicateCourse(instructorId, course)) {		
+		int courseId = course.getId();
+		
+		if(courseId == 0 && courseService.hasDuplicateCourse(instructorId, course)) {		
 			theModel.addAttribute("duplicateCourse", true);
 			course.setName("");
 			theModel.addAttribute("course", course);
 			theModel.addAttribute("instructor", user);
 			return "create-course-form";
 		} else {
-			int courseId = course.getId();
 			initCreateCourseForm(user, theModel);
-			
 			courseService.saveOrUpdate(course);
 			if(courseId != 0) {
 				theModel.addAttribute("updateSuccess", true);

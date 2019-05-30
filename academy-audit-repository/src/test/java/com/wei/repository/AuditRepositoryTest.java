@@ -40,9 +40,9 @@ public class AuditRepositoryTest {
 	@Autowired
 	private AuditRepository auditRepository;
 	
-	private final static String USERNAME_FOR_TEST = "userForTest";
+	private final static String USERNAME = "user";
 	
-	private final static int USER_ID_FOR_TEST = 1;
+	private final static int USER_ID = 1;
 	
 	private final static int USER_ID_NOT_EXIST = 2;
 	
@@ -54,7 +54,7 @@ public class AuditRepositoryTest {
 	}
 	
 	@Test
-	public void create_new_audit_success() {
+	public void createNewAudit_success() {
 		
 		Audit audit = new Audit(user, new Timestamp(System.currentTimeMillis()+2000), "123");
 		
@@ -64,14 +64,14 @@ public class AuditRepositoryTest {
 		TypedQuery<Long> theQuery = entityManager.createQuery(
 				"select count(*) from Audit where user.id=:id group by user.id", Long.class);
 		
-		theQuery.setParameter("id", USER_ID_FOR_TEST);
+		theQuery.setParameter("id", USER_ID);
 		
 		assertThat(theQuery.getSingleResult().intValue(), is(3));
 	}
 	
 	@Test
 	public void readAll_exist() {
-		assertThat(auditRepository.readAll(USER_ID_FOR_TEST).size(), is(2));
+		assertThat(auditRepository.readAll(USER_ID).size(), is(2));
 	}
 	
 	@Test
@@ -82,12 +82,12 @@ public class AuditRepositoryTest {
 	@Test
 	public void deleteAll_success() {
 		
-		auditRepository.deleteAll(USER_ID_FOR_TEST);
+		auditRepository.deleteAll(USER_ID);
 		
 		TypedQuery<Long> theQuery = entityManager.createQuery(
 				"select count(*) from Audit where user.id=:id group by user.id", Long.class);
 		
-		theQuery.setParameter("id", USER_ID_FOR_TEST);
+		theQuery.setParameter("id", USER_ID);
 		
 		assertThat(theQuery.getResultList().size(), is(0));
 		
@@ -97,9 +97,9 @@ public class AuditRepositoryTest {
 		
 		user = new Users();
 		
-		user.setUsername(USERNAME_FOR_TEST);
+		user.setUsername(USERNAME);
 		
-		user.setPassword(USERNAME_FOR_TEST);
+		user.setPassword(USERNAME);
 		
 		entityManager.persist(user);
 		

@@ -7,7 +7,4 @@ dependencies {
 	// for @Valid
 	implementation 'org.hibernate.validator:hibernate-validator:6.0.16.Final'
 	
-	// for HttpSession
-	// equals provided group: 'javax.servlet', name: 'servlet-api', version: '2.5'
-	compileOnly 'javax.servlet:servlet-api:2.5'
 }

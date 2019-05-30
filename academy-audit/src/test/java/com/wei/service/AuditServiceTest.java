@@ -27,77 +27,59 @@ public class AuditServiceTest {
 
 	@Mock
 	private AuditRepository auditRepository;
-	
+
 	@InjectMocks
 	private AuditService auditService;
-	
+
 	@Captor
 	ArgumentCaptor<Audit> auditCaptor;
-	
+
 	private Users user;
-	
 	private List<Audit> audits;
-	
-	private final static String USERNAME_FOR_TEST = "userForTest";
-	
-	private final static int USER_ID_FOR_TEST = 1;
-	
+
+	private final static String USERNAME = "user";
+	private final static int USER_ID = 1;
 	private final static int USER_ID_NOT_EXIST = 2;
-	
-	private final static String ADDRESS_FOR_TEST = "0.0.0.0";
-	
+	private final static String ADDRESS = "0.0.0.0";
+
 	@Before
 	public void before() {
 		createInitUserWithAudits();
 	}
-	
+
 	@Test
 	public void create_success() {
-		
-		auditService.create(user, ADDRESS_FOR_TEST);
-		
+		auditService.create(user, ADDRESS);
 		then(auditRepository).should().create(auditCaptor.capture());
 	}
-	
+
 	@Test
 	public void readAll_exist() {
-		
-		given(auditRepository.readAll(USER_ID_FOR_TEST)).willReturn(audits);
-		
-		assertThat(auditService.readAll(USER_ID_FOR_TEST), is(audits));
+		given(auditRepository.readAll(USER_ID)).willReturn(audits);
+		assertThat(auditService.readAll(USER_ID), is(audits));
 	}
-	
+
 	@Test
 	public void readAll_not_exist() {
-		
 		List<Audit> emptyList = new ArrayList<>();
-		
 		given(auditRepository.readAll(USER_ID_NOT_EXIST)).willReturn(emptyList);
-		
 		assertThat(auditService.readAll(USER_ID_NOT_EXIST).size(), is(0));
 	}
-	
+
 	@Test
 	public void deleteAll_success() {
-		
-		auditService.deleteAll(USER_ID_FOR_TEST);
-		
-		then(auditRepository).should().deleteAll(USER_ID_FOR_TEST);
+		auditService.deleteAll(USER_ID);
+		then(auditRepository).should().deleteAll(USER_ID);
 	}
 
 	private void createInitUserWithAudits() {
 		
 		user = new Users();
-		
-		user.setUsername(USERNAME_FOR_TEST);
-		
-		user.setPassword(USERNAME_FOR_TEST);
-		
+		user.setUsername(USERNAME);
+		user.setPassword(USERNAME);
+
 		audits = new ArrayList<>();
-		
 		audits.add(new Audit(user, new Timestamp(System.currentTimeMillis()), "123"));
-		audits.add(new Audit(user, new Timestamp(System.currentTimeMillis()+1000), "123"));
-		
+		audits.add(new Audit(user, new Timestamp(System.currentTimeMillis() + 1000), "123"));
 	}
-	
 }

@@ -54,39 +54,39 @@ public class UserServiceTest {
 	
 	private Users user;
 	
-	private final static String USERNAME_FOR_TEST = "userForTest1";
+	private final static String USERNAME = "userForTest1";
 	
-	private final static String USER_EMAIL_FOR_TEST = "userForTest1@gmail.com";
+	private final static String USER_EMAIL = "userForTest1@gmail.com";
 	
-	private final static String NEW_PASSWORD_FOR_TEST = "newPassword";
+	private final static String NEW_PASSWORD = "newPassword";
 	
-	private final static String TOKEN_FOR_TEST = "token";
+	private final static String TOKEN = "token";
 	
-	private final static int USER_ID_FOR_TEST = 1;
+	private final static int ID_OF_USER = 1;
 	
 	private final static String DUMMY_VALUE = "dummy";
 	
-	private final static int ID_NOTEXIST = 0;
+	private final static int ID_NOT_EXIST = 0;
 	
 	@Before
 	public void before() {
-		injectTestUserWith(USERNAME_FOR_TEST, USER_EMAIL_FOR_TEST);
+		injectTestUserWith(USERNAME, USER_EMAIL);
 	}
 
 	@Test
 	public void read_exist() {
 		
-		given(userRepository.read(USER_ID_FOR_TEST)).willReturn(user);
+		given(userRepository.read(ID_OF_USER)).willReturn(user);
 		
-		assertThat(userService.read(USER_ID_FOR_TEST), is(user));
+		assertThat(userService.read(ID_OF_USER), is(user));
 	}
 	
 	@Test
-	public void read_not_exist() {
+	public void read_notExist() {
 		
-		given(userRepository.read(ID_NOTEXIST)).willReturn(null);
+		given(userRepository.read(ID_NOT_EXIST)).willReturn(null);
 		
-		assertThat(userService.read(ID_NOTEXIST), nullValue());
+		assertThat(userService.read(ID_NOT_EXIST), nullValue());
 	}
 	
 	@Test
@@ -100,9 +100,9 @@ public class UserServiceTest {
 	}
 	
 	@Test
-	public void update() {
+	public void update_success() {
 		
-		user.setPassword(NEW_PASSWORD_FOR_TEST);
+		user.setPassword(NEW_PASSWORD);
 		
 		userService.update(user);
 		
@@ -112,13 +112,13 @@ public class UserServiceTest {
 	@Test
 	public void findByUserName_exist() {
 		
-		given(userRepository.findByUserName(USERNAME_FOR_TEST)).willReturn(user);
+		given(userRepository.findByUserName(USERNAME)).willReturn(user);
 		
-		assertThat(userService.findByUserName(USERNAME_FOR_TEST), is(user));
+		assertThat(userService.findByUserName(USERNAME), is(user));
 	}
 	
 	@Test
-	public void findByUserName_not_exist() {
+	public void findByUserName_notExist() {
 		
 		given(userRepository.findByUserName(DUMMY_VALUE)).willReturn(null);
 		
@@ -128,13 +128,13 @@ public class UserServiceTest {
 	@Test
 	public void findByEmail_exist() {
 		
-		given(userRepository.findByEmail(USER_EMAIL_FOR_TEST)).willReturn(user);
+		given(userRepository.findByEmail(USER_EMAIL)).willReturn(user);
 		
-		assertThat(userService.findByEmail(USER_EMAIL_FOR_TEST), is(user));
+		assertThat(userService.findByEmail(USER_EMAIL), is(user));
 	}
 	
 	@Test
-	public void findByEmail_not_exist() {
+	public void findByEmail_notExist() {
 		
 		given(userRepository.findByEmail(DUMMY_VALUE)).willReturn(null);
 		
@@ -142,46 +142,46 @@ public class UserServiceTest {
 	}
 	
 	@Test
-	public void passwordResetLink() {
+	public void passwordResetLink_success() {
 		
-		given(userRepository.findByUserName(USERNAME_FOR_TEST)).willReturn(user);
+		given(userRepository.findByUserName(USERNAME)).willReturn(user);
 		
-		given(userDetailRepository.read(USER_ID_FOR_TEST)).
+		given(userDetailRepository.read(ID_OF_USER)).
 		willReturn(user.getUserDetail());
 		
 		given(generator.generateTempPassword(user))
-			.willReturn(NEW_PASSWORD_FOR_TEST);
+			.willReturn(NEW_PASSWORD);
 		
-		given(generator.encode(NEW_PASSWORD_FOR_TEST))
-			.willReturn(NEW_PASSWORD_FOR_TEST);
+		given(generator.encode(NEW_PASSWORD))
+			.willReturn(NEW_PASSWORD);
 		
 		given(generator.generateToken(user))
-			.willReturn(TOKEN_FOR_TEST);
+			.willReturn(TOKEN);
 		
-		userService.passwordResetLink(USERNAME_FOR_TEST);
+		userService.passwordResetLink(USERNAME);
 		
-		assertThat(user.getPassword(), is(NEW_PASSWORD_FOR_TEST));
+		assertThat(user.getPassword(), is(NEW_PASSWORD));
 		
 		then(userRepository).should().update(user);
 		
 		then(emailService).should().passwordResetLink(
-				USER_EMAIL_FOR_TEST, 
-				TOKEN_FOR_TEST, 
-				NEW_PASSWORD_FOR_TEST);
+				USER_EMAIL, 
+				TOKEN, 
+				NEW_PASSWORD);
 	}
 	
 	@Test
 	public void verify_success() {
 		
-		given(userRepository.findByEmail(USER_EMAIL_FOR_TEST)).willReturn(user);
+		given(userRepository.findByEmail(USER_EMAIL)).willReturn(user);
 		
-		given(generator.generateToken(user)).willReturn(TOKEN_FOR_TEST);
+		given(generator.generateToken(user)).willReturn(TOKEN);
 		
-		assertThat(userService.verify(USER_EMAIL_FOR_TEST, TOKEN_FOR_TEST), is(user));
+		assertThat(userService.verify(USER_EMAIL, TOKEN), is(user));
 	}
 	
 	@Test
-	public void verify_user_not_exist() {
+	public void verify_user_notExist() {
 		
 		given(userRepository.findByEmail(DUMMY_VALUE)).willReturn(null);
 		
@@ -189,48 +189,48 @@ public class UserServiceTest {
 	}
 	
 	@Test
-	public void verify_incorrect_token() {
+	public void verify_incorrectToken() {
 		
-		given(userRepository.findByEmail(USER_EMAIL_FOR_TEST)).willReturn(user);
+		given(userRepository.findByEmail(USER_EMAIL)).willReturn(user);
 		
-		given(generator.generateToken(user)).willReturn(TOKEN_FOR_TEST);
+		given(generator.generateToken(user)).willReturn(TOKEN);
 		
-		assertThat(userService.verify(USER_EMAIL_FOR_TEST, DUMMY_VALUE), nullValue());
+		assertThat(userService.verify(USER_EMAIL, DUMMY_VALUE), nullValue());
 	}
 	
 	@Test
 	public void isUsernameAndEmailMatched_match() {
 		
-		given(userRepository.findByUserName(USERNAME_FOR_TEST)).willReturn(user);
+		given(userRepository.findByUserName(USERNAME)).willReturn(user);
 		
-		given(userDetailRepository.read(USER_ID_FOR_TEST)).willReturn(user.getUserDetail());
+		given(userDetailRepository.read(ID_OF_USER)).willReturn(user.getUserDetail());
 		
 		boolean actual = 
-				userService.isUsernameAndEmailMatched(USERNAME_FOR_TEST, USER_EMAIL_FOR_TEST);
+				userService.isUsernameAndEmailMatched(USERNAME, USER_EMAIL);
 		
 		assertTrue(actual);
 	}
 	
 	@Test
-	public void isUsernameAndEmailMatched_user_not_exist() {
+	public void isUsernameAndEmailMatched_userNotExist() {
 		
 		given(userRepository.findByUserName(DUMMY_VALUE)).willReturn(null);
 		
 		boolean actual = 
-				userService.isUsernameAndEmailMatched(DUMMY_VALUE, USER_EMAIL_FOR_TEST);
+				userService.isUsernameAndEmailMatched(DUMMY_VALUE, USER_EMAIL);
 		
 		assertFalse(actual);
 	}
 	
 	@Test
-	public void isUsernameAndEmailMatched_not_match() {
+	public void isUsernameAndEmailMatched_notMatch() {
 		
-		given(userRepository.findByUserName(USERNAME_FOR_TEST)).willReturn(user);
+		given(userRepository.findByUserName(USERNAME)).willReturn(user);
 		
-		given(userDetailRepository.read(USER_ID_FOR_TEST)).willReturn(user.getUserDetail());
+		given(userDetailRepository.read(ID_OF_USER)).willReturn(user.getUserDetail());
 		
 		boolean actual = 
-				userService.isUsernameAndEmailMatched(USERNAME_FOR_TEST, DUMMY_VALUE);
+				userService.isUsernameAndEmailMatched(USERNAME, DUMMY_VALUE);
 		
 		assertFalse(actual);
 	}
@@ -238,9 +238,9 @@ public class UserServiceTest {
 	@Test
 	public void resetPassword_success() {
 		
-		given(generator.encode(NEW_PASSWORD_FOR_TEST)).willReturn(NEW_PASSWORD_FOR_TEST);
+		given(generator.encode(NEW_PASSWORD)).willReturn(NEW_PASSWORD);
 		
-		userService.resetPassword(user, NEW_PASSWORD_FOR_TEST);
+		userService.resetPassword(user, NEW_PASSWORD);
 		
 		then(userRepository).should().update(user);
 	}
@@ -249,17 +249,17 @@ public class UserServiceTest {
 		
 		user = new Users();
 		
-		user.setId(USER_ID_FOR_TEST);
+		user.setId(ID_OF_USER);
 		
-		user.setUsername(USERNAME_FOR_TEST);
+		user.setUsername(USERNAME);
 		
-		user.setPassword(USERNAME_FOR_TEST);
+		user.setPassword(USERNAME);
 		
 		UserDetail detail = new UserDetail();
 		
-		detail.setEmail(USER_EMAIL_FOR_TEST);
+		detail.setEmail(USER_EMAIL);
 		
-		detail.setNickname(USERNAME_FOR_TEST);
+		detail.setNickname(USERNAME);
 		
 		detail.setUser(user);
 		

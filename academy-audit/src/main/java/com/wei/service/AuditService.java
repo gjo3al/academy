@@ -17,28 +17,22 @@ public class AuditService {
 
 	@Autowired
 	private AuditRepository auditRepository;
-	
+
 	public Audit create(Users user, String address) {
 		
 		Audit audit = new Audit();
-		
 		audit.setUser(user);
-		
 		audit.setAddress(address);
-		
 		audit.setTimestamp(new Timestamp(System.currentTimeMillis()));
-		
+
 		return auditRepository.create(audit);
 	}
-	
+
 	public List<Audit> readAll(int userId) {
-		
 		return auditRepository.readAll(userId);
 	}
 
 	public void deleteAll(int userId) {
-		
 		auditRepository.deleteAll(userId);
 	}
-
 }

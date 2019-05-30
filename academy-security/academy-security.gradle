@@ -1,4 +1,5 @@
 dependencies {
+	implementation 'org.springframework:spring-webmvc:5.1.7.RELEASE'
 	implementation 'org.springframework.security:spring-security-core:5.1.5.RELEASE'
 	implementation 'org.springframework.security:spring-security-config:5.1.5.RELEASE'
 	implementation 'org.springframework.security:spring-security-web:5.1.5.RELEASE'

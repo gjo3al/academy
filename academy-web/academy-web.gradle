@@ -33,4 +33,5 @@ dependencies {
 	testImplementation 'org.springframework:spring-test:5.1.7.RELEASE'
 	testImplementation 'junit:junit:4.12'
 	
+	testImplementation 'net.sourceforge.htmlunit:htmlunit:2.35.0'
 }

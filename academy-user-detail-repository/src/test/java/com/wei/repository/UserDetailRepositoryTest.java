@@ -36,9 +36,9 @@ public class UserDetailRepositoryTest {
 	@Autowired
 	private UserDetailRepository userDetailRepository;
 	
-	private final static String USERNAME_FOR_TEST = "userForTest";
+	private final static String USERNAME = "userForTest";
 	
-	private final static String USER_EMAIL_FOR_TEST = "userForTest@gmail.com";
+	private final static String USER_EMAIL = "userForTest@gmail.com";
 	
 	private final static int ID_NOT_EXIST = 0;
 	
@@ -54,12 +54,12 @@ public class UserDetailRepositoryTest {
 		
 		UserDetail detail = userDetailRepository.read(user.getId());
 		
-		assertThat(detail.getEmail(), is(USER_EMAIL_FOR_TEST));
-		assertThat(detail.getNickname(), is(USERNAME_FOR_TEST));
+		assertThat(detail.getEmail(), is(USER_EMAIL));
+		assertThat(detail.getNickname(), is(USERNAME));
 	}
 	
 	@Test
-	public void read_not_exist() {
+	public void read_notExist() {
 		
 		UserDetail detail = userDetailRepository.read(ID_NOT_EXIST);
 		
@@ -70,15 +70,15 @@ public class UserDetailRepositoryTest {
 		
 		Users user = new Users();
 		
-		user.setUsername(USERNAME_FOR_TEST);
+		user.setUsername(USERNAME);
 		
-		user.setPassword(USERNAME_FOR_TEST);
+		user.setPassword(USERNAME);
 		
 		UserDetail detail = new UserDetail();
 		
-		detail.setEmail(USER_EMAIL_FOR_TEST);
+		detail.setEmail(USER_EMAIL);
 		
-		detail.setNickname(USERNAME_FOR_TEST);
+		detail.setNickname(USERNAME);
 		
 		detail.setUser(user);
 		

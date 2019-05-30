@@ -37,9 +37,9 @@ public class AuthoritiesRepositoryTest {
 	
 	private final static String DUMMY = "dummy";
 	
-	private final static String USERNAME_FOR_TEST = "userForTest";
+	private final static String USERNAME = "userForTest";
 	
-	private final static int USER_ID_FOR_TEST = 1;
+	private final static int ID_OF_USER = 1;
 	
 	@Autowired
 	private AuthoritiesRepository authoritiesRepository;
@@ -51,7 +51,7 @@ public class AuthoritiesRepositoryTest {
 		
 		auth.setAuthority(AUTHORITY_NAME);
 		
-		auth.setUser(createUserWith(USERNAME_FOR_TEST));
+		auth.setUser(createUserWith(USERNAME));
 		
 		authoritiesRepository.create(auth);
 		
@@ -63,7 +63,7 @@ public class AuthoritiesRepositoryTest {
 	@Test
 	public void hasAuthority_exist() {
 		
-		Users user = createUserWith(USERNAME_FOR_TEST);
+		Users user = createUserWith(USERNAME);
 		
 		Authorities auth = new Authorities();
 		
@@ -73,22 +73,22 @@ public class AuthoritiesRepositoryTest {
 		
 		entityManager.persist(auth);
 		
-		assertTrue(authoritiesRepository.hasAuthority(USER_ID_FOR_TEST, AUTHORITY_NAME));
+		assertTrue(authoritiesRepository.hasAuthority(ID_OF_USER, AUTHORITY_NAME));
 	}
 	
 	@Test
-	public void hasAuthority_not_exist() {
+	public void hasAuthority_notExist() {
 		
-		assertFalse(authoritiesRepository.hasAuthority(USER_ID_FOR_TEST, DUMMY));
+		assertFalse(authoritiesRepository.hasAuthority(ID_OF_USER, DUMMY));
 	}
 
 	private Users createUserWith(String username) {
 		
 		Users user = new Users();
 		
-		user.setUsername(USERNAME_FOR_TEST);
+		user.setUsername(USERNAME);
 		
-		user.setPassword(USERNAME_FOR_TEST);
+		user.setPassword(USERNAME);
 		
 		return user;
 	}
