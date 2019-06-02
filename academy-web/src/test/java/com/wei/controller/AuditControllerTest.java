@@ -5,10 +5,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -27,7 +23,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.wei.config.TestWebConfig;
-import com.wei.entity.Audit;
 import com.wei.entity.Users;
 import com.wei.service.AuditService;
 

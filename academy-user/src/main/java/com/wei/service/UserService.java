@@ -77,7 +77,7 @@ public class UserService {
 		if(checkedToken.equals(token)) {
 			// fetch courses in order to offer studying courses data to JSP
 			// for fear that delete studying courses after reset password
-			theUser.getCourses();
+			theUser.getCourses().isEmpty();
 			return theUser;
 		} else
 			return null;
